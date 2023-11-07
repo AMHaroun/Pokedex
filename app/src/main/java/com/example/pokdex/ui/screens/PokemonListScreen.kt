@@ -1,4 +1,4 @@
-package com.example.pokdex.ui
+package com.example.pokdex.ui.screens
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -27,7 +28,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pokdex.R
-import com.example.pokdex.model.PokemonType
+import com.example.pokdex.ui.HeartSaveButton
+import com.example.pokdex.ui.SearchBar
+
 
 @Composable
 fun PokemonListScreen(modifier: Modifier){
@@ -42,6 +45,8 @@ fun PokemonListScreen(modifier: Modifier){
                 .padding(top = dimensionResource(id = R.dimen.small_padding))
                 .fillMaxWidth()
             )
+        LazyColumn{
+        }
 
 
     }
@@ -60,6 +65,7 @@ fun PokemonListScreenPreview(){
 
 
 
+
 @Composable
 fun PokemonInformationCard(
     modifier: Modifier = Modifier,
@@ -70,21 +76,18 @@ fun PokemonInformationCard(
     showMaleSymbol: Boolean,
     onPokemonSaved: ()->Unit,
     isPokemonSaved: Boolean,
-    pokemonFirstType: PokemonType,
-    pokemonSecondType: PokemonType? = null,
-    pokemonThirdType: PokemonType? = null
 ){
     Card(
         shape = MaterialTheme.shapes.large,
         modifier = modifier
             .fillMaxWidth()
-            .height(100.dp)
+            .height(72.dp)
     ){
-        Row(
-            modifier = Modifier
-                .padding(dimensionResource(id = R.dimen.small_padding))
-        ) {
-            PokemonImage(pokemonImageId = pokemonImage)
+        Row{
+            PokemonImage(
+                pokemonImageId = pokemonImage,
+                modifier = Modifier.padding(start = dimensionResource(id = R.dimen.small_padding))
+                )
 
             PokemonInformation(
                 pokemonName = pokemonName,
@@ -93,7 +96,6 @@ fun PokemonInformationCard(
                 pokemonIndex = pokemonIndex,
                 onPokemonSaved = onPokemonSaved,
                 isPokemonSaved = isPokemonSaved,
-                pokemonFirstType = pokemonFirstType
             )
 
         }
@@ -114,12 +116,8 @@ fun PokemonInformationCardPreview(){
         showMaleSymbol = true,
         onPokemonSaved = {},
         isPokemonSaved = true,
-        pokemonFirstType = PokemonType.NORMAL
     )
 }
-
-
-
 
 
 
@@ -134,7 +132,7 @@ fun PokemonImage(
         painter = painterResource(id = pokemonImageId),
         contentDescription = null,
         contentScale = ContentScale.Fit,
-        modifier = Modifier
+        modifier = modifier
             .clip(MaterialTheme.shapes.medium)
     )
     
@@ -151,10 +149,6 @@ fun PokemonImagePreview(){
 
 
 
-
-
-
-
 @Composable
 fun PokemonInformation(
     modifier: Modifier = Modifier,
@@ -164,26 +158,20 @@ fun PokemonInformation(
     pokemonIndex: Int,
     onPokemonSaved: () -> Unit,
     isPokemonSaved: Boolean,
-    /* Pokemon are known to have a maximum of three types
-     * Variables also determine the order in which types are shown */
-    pokemonFirstType: PokemonType,
-    pokemonSecondType: PokemonType? = null,
-    pokemonThirdType: PokemonType? = null,
 ){
 
-    Row() {
-        Column {
-            Text(
-                text = pokemonName,
-                style = MaterialTheme.typography.headlineMedium,
-                color = Color.Black
-            )
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = pokemonName,
+            style = MaterialTheme.typography.headlineLarge,
+            modifier = Modifier
+                .padding(start = dimensionResource(R.dimen.medium_padding))
+        )
 
-            /* Add a switch statement to determine the pokemon's type
-             * and display that types image */
-        }
-
-        if(showFemaleSymbol){
+       if(showFemaleSymbol){
             Icon(
                 painter = painterResource(id = R.drawable.female_symbol_icon),
                 tint = Color.Magenta,
@@ -199,16 +187,23 @@ fun PokemonInformation(
         }
 
         Column(
+            modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.End,
             verticalArrangement = Arrangement.Top
         ) {
             Text(
                 text = "#$pokemonIndex",
-                style = MaterialTheme.typography.headlineSmall,
+                style = MaterialTheme.typography.displaySmall,
                 fontWeight = FontWeight.ExtraBold,
-                modifier = Modifier.alpha(0.6f)
+                modifier = Modifier
+                    .alpha(0.6f)
+                    .padding(end = dimensionResource(id = R.dimen.medium_padding))
             )
-            HeartSaveButton(onClick = { onPokemonSaved() }, saved = isPokemonSaved)
+            HeartSaveButton(
+                onClick = { onPokemonSaved() },
+                saved = isPokemonSaved,
+                modifier = Modifier.padding(end = dimensionResource(id = R.dimen.medium_padding))
+                )
 
         }
 
@@ -229,6 +224,8 @@ fun PokemonInformationPreview(){
         pokemonIndex = 123,
         onPokemonSaved = {},
         isPokemonSaved = true,
-        pokemonFirstType = PokemonType.NORMAL
         )
 }
+
+
+
