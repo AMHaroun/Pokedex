@@ -17,5 +17,6 @@ enum class PokemonType {
     DRAGON,
     ROCK,
     GRASS,
-    DARK
+    DARK,
+    UNKNOWN
 }
