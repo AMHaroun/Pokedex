@@ -45,6 +45,7 @@ fun PokemonListScreen(modifier: Modifier){
                 .padding(top = dimensionResource(id = R.dimen.small_padding))
                 .fillMaxWidth()
             )
+
         LazyColumn{
         }
 
@@ -127,7 +128,8 @@ fun PokemonImage(
     modifier: Modifier = Modifier,
     @DrawableRes pokemonImageId: Int
     ){
-    
+    // Note that to load images in the ui from a remote service
+    // you will likely have to change this to AsyncImage
     Image(
         painter = painterResource(id = pokemonImageId),
         contentDescription = null,
