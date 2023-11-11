@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -28,12 +29,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pokdex.R
+import com.example.pokdex.network.model.Pokemon
 import com.example.pokdex.ui.HeartSaveButton
 import com.example.pokdex.ui.SearchBar
 
 
 @Composable
-fun PokemonListScreen(modifier: Modifier){
+fun PokemonListScreen(modifier: Modifier, pokemonList: MutableList<Pokemon>){
 
     Column(
         modifier = modifier.fillMaxSize()
@@ -47,6 +49,19 @@ fun PokemonListScreen(modifier: Modifier){
             )
 
         LazyColumn{
+            items(pokemonList){item->
+                PokemonInformationCard(
+                    pokemonImage = R.drawable.ditto_front_default_sample,
+                    pokemonName = item.name,
+                    pokemonIndex = item.id,
+                    showFemaleSymbol = true,
+                    showMaleSymbol = true,
+                    onPokemonSaved = { /*TODO*/ },
+                    isPokemonSaved = true
+                )
+
+            }
+
         }
 
 
@@ -61,7 +76,7 @@ fun PokemonListScreen(modifier: Modifier){
 )
 @Composable
 fun PokemonListScreenPreview(){
-    PokemonListScreen(modifier = Modifier)
+    PokemonListScreen(modifier = Modifier, pokemonList = mutableListOf())
 }
 
 

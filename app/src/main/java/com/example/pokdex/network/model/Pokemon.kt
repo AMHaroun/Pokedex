@@ -1,41 +1,41 @@
-package com.example.pokdex.model
+package com.example.pokdex.network.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 
-//Models Json Data returned from https://pokeapi.co/api/v2/pokemon/{id or name ex."ditto"}/
+//Models Json Data returned from https://pokeapi.co/api/v2/pokemon/{id or name} ex."ditto"/
 @Serializable
 data class Pokemon(
 
     @SerialName(value = "id")
-    val id: Int,
+    val id: Int = 0,
 
     @SerialName(value = "name")
     val name: String,
 
     @SerialName(value = "base_experience")
-    val baseExperience: Int,
+    val baseExperience: Int = 0,
 
     @SerialName(value = "height")
-    val height: Int,
+    val height: Int = 0,
 
     @SerialName(value = "is_default")
-    val isDefault: Boolean,
+    val isDefault: Boolean = true,
 
     @SerialName(value = "order")
-    val order: Int,
+    val order: Int = 0,
 
     @SerialName(value = "weight")
-    val weight: Int,
+    val weight: Int = 0,
 
     @SerialName(value = "abilities")
-    val abilities: List<AbilityInfo>,
+    val abilities: List<AbilityInfo> = emptyList(),
 
     @SerialName(value = "forms")
-    val forms: List<Form>,
+    val forms: List<Form> = emptyList(),
 
-)
+    )
 
 
 @Serializable

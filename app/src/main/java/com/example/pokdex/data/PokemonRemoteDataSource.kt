@@ -1,6 +1,7 @@
 package com.example.pokdex.data
 
-import com.example.pokdex.model.Pokemon
+import com.example.pokdex.network.model.Pokemon
+import com.example.pokdex.network.model.PokemonListResponse
 import com.example.pokdex.network.PokemonApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
@@ -8,9 +9,9 @@ import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 
 
-class RemotePokedexDataSource {
+class PokemonRemoteDataSource {
 
-    private val baseUrl = "https://pokeapi.co/"
+    private val baseUrl = "https://pokeapi.co/api/v2/"
 
     private val retrofit = Retrofit.Builder()
         .addConverterFactory(Json{ignoreUnknownKeys = true}
@@ -22,8 +23,11 @@ class RemotePokedexDataSource {
         retrofit.create(PokemonApiService::class.java)
     }
 
-    suspend fun getPokemonData(pokemonName: String): Pokemon =
+    suspend fun getPokemon(pokemonName: String): Pokemon =
         retrofitService.getPokemon(pokemonName)
+
+    suspend fun getPokemonResourcesList(limit: Int, offset: Int): PokemonListResponse =
+        retrofitService.getPokemonPaginatedResourcesList(limit, offset)
 
 
 }
