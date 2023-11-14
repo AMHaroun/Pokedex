@@ -29,7 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pokdex.R
-import com.example.pokdex.network.model.Pokemon
+import com.example.pokdex.network.responses.Pokemon
 import com.example.pokdex.ui.HeartSaveButton
 import com.example.pokdex.ui.SearchBar
 

@@ -9,9 +9,7 @@ class PokemonListScreenViewModelFactory(
     private val repository: PokemonRepository = PokemonRepository(PokemonRemoteDataSource())
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        // Checks if class passed is the same as our viewmodel
         if(modelClass.isAssignableFrom(PokemonListScreenViewModel::class.java)) {
-            // returns a made viewmodel with our dependency
             return PokemonListScreenViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel Class")
