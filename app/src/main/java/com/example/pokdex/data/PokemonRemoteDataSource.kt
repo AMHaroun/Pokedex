@@ -12,7 +12,7 @@ import retrofit2.Retrofit
 
 class PokemonRemoteDataSource {
 
-    private val baseUrl = Constants.baseUrl
+    private val baseUrl = Constants.BASE_URL
 
     private val retrofit = Retrofit.Builder()
         .addConverterFactory(Json{ignoreUnknownKeys = true}
