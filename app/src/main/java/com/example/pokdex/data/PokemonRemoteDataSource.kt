@@ -1,5 +1,6 @@
 package com.example.pokdex.data
 
+import com.example.pokdex.Constants
 import com.example.pokdex.network.responses.Pokemon
 import com.example.pokdex.network.PokemonApiService
 import com.example.pokdex.network.responses.PokemonList
@@ -11,7 +12,7 @@ import retrofit2.Retrofit
 
 class PokemonRemoteDataSource {
 
-    private val baseUrl = "https://pokeapi.co/api/v2/"
+    private val baseUrl = Constants.baseUrl
 
     private val retrofit = Retrofit.Builder()
         .addConverterFactory(Json{ignoreUnknownKeys = true}
