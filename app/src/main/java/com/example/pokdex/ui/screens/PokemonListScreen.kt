@@ -16,6 +16,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -28,14 +30,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.pokdex.R
+import com.example.pokdex.data.PokemonRepository
 import com.example.pokdex.network.responses.Pokemon
 import com.example.pokdex.ui.HeartSaveButton
 import com.example.pokdex.ui.SearchBar
 
 
 @Composable
-fun PokemonListScreen(modifier: Modifier, pokemonList: MutableList<Pokemon>){
+fun PokemonListScreen(modifier: Modifier, viewModel: PokemonListScreenViewModel){
+
+    val pokemonList by remember{viewModel.pokemonList}
+    val endReached by remember{viewModel.endReached}
+    val loadError by remember{viewModel.loadingError}
+    val isLoading by remember{viewModel.isLoading}
 
     Column(
         modifier = modifier.fillMaxSize()
@@ -49,17 +59,19 @@ fun PokemonListScreen(modifier: Modifier, pokemonList: MutableList<Pokemon>){
             )
 
         LazyColumn{
-            items(pokemonList){item->
+            items(pokemonList.size){
+                if(it >= pokemonList.size - 1 && !endReached) {
+                    viewModel.loadPokemonPaginated()
+                }
                 PokemonInformationCard(
                     pokemonImage = R.drawable.ditto_front_default_sample,
-                    pokemonName = item.name,
-                    pokemonIndex = item.id,
+                    pokemonName = pokemonList[it].pokemonName,
+                    pokemonIndex = 123,
                     showFemaleSymbol = true,
                     showMaleSymbol = true,
                     onPokemonSaved = { /*TODO*/ },
                     isPokemonSaved = true
                 )
-
             }
 
         }
@@ -76,7 +88,7 @@ fun PokemonListScreen(modifier: Modifier, pokemonList: MutableList<Pokemon>){
 )
 @Composable
 fun PokemonListScreenPreview(){
-    PokemonListScreen(modifier = Modifier, pokemonList = mutableListOf())
+    //PokemonListScreen(modifier = Modifier)
 }
 
 
