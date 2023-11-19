@@ -1,7 +1,5 @@
 package com.example.pokdex.ui.screens
 
-import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,14 +8,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -30,17 +25,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import coil.compose.AsyncImage
 import com.example.pokdex.R
-import com.example.pokdex.data.PokemonRepository
-import com.example.pokdex.network.responses.Pokemon
 import com.example.pokdex.ui.HeartSaveButton
 import com.example.pokdex.ui.SearchBar
 
 
 @Composable
-fun PokemonListScreen(modifier: Modifier, uiState: PokemonListScreenUiState, pageinate: () -> Unit){
+fun PokemonListScreen(modifier: Modifier, uiState: PokemonListScreenUiState, paginate: () -> Unit){
 
     Column(
         modifier = modifier.fillMaxSize()
@@ -58,7 +50,7 @@ fun PokemonListScreen(modifier: Modifier, uiState: PokemonListScreenUiState, pag
                 text = uiState.loadingErrorString
             )
         } else {
-            PokemonList(Modifier, uiState, pageinate)
+            PokemonList(Modifier, uiState, paginate)
         }
 
 
@@ -83,16 +75,16 @@ fun PokemonListScreenPreview(){
 
 
 @Composable
-fun PokemonList(modifier: Modifier, uiState: PokemonListScreenUiState, pageinate:()->Unit){
+fun PokemonList(modifier: Modifier, uiState: PokemonListScreenUiState, paginate:()->Unit){
 
     LazyColumn(modifier = modifier){
         items(uiState.pokemonList.value.size){
             if(it >= uiState.pokemonList.value.size - 1 && !uiState.endReached) {
-                pageinate()
+                paginate()
             }
             PokemonInformationCard(
                 modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
-                pokemonImage = R.drawable.ditto_front_default_sample,
+                pokemonImageUrl = uiState.pokemonList.value[it].pokemonImageUrl,
                 pokemonName = uiState.pokemonList.value[it].pokemonName,
                 pokemonIndex = 123,
                 showFemaleSymbol = true,
@@ -111,7 +103,8 @@ fun PokemonList(modifier: Modifier, uiState: PokemonListScreenUiState, pageinate
 )
 @Composable
 fun PokemonListPreview(){
-    // Add Fake data
+    // TODO: Add Fake data
+    // PokemonList()
 }
 
 
@@ -121,7 +114,7 @@ fun PokemonListPreview(){
 @Composable
 fun PokemonInformationCard(
     modifier: Modifier = Modifier,
-    @DrawableRes pokemonImage: Int,
+    pokemonImageUrl: String,
     pokemonName: String,
     pokemonIndex: Int,
     showFemaleSymbol: Boolean,
@@ -137,7 +130,7 @@ fun PokemonInformationCard(
     ){
         Row{
             PokemonImage(
-                pokemonImageId = pokemonImage,
+                pokemonImageUrl = pokemonImageUrl,
                 modifier = Modifier.padding(start = dimensionResource(id = R.dimen.small_padding))
                 )
 
@@ -159,16 +152,17 @@ fun PokemonInformationCard(
 )
 @Composable
 fun PokemonInformationCardPreview(){
-    PokemonInformationCard(
-        modifier = Modifier,
-        pokemonImage = R.drawable.ditto_front_default_sample,
-        pokemonName = "Ditto",
-        pokemonIndex = 234,
-        showFemaleSymbol = true,
-        showMaleSymbol = true,
-        onPokemonSaved = {},
-        isPokemonSaved = true,
-    )
+    // TODO: Add fake data
+//    PokemonInformationCard(
+//        modifier = Modifier,
+//        pokemonImageUrl = R.drawable.ditto_front_default_sample,
+//        pokemonName = "Ditto",
+//        pokemonIndex = 234,
+//        showFemaleSymbol = true,
+//        showMaleSymbol = true,
+//        onPokemonSaved = {},
+//        isPokemonSaved = true,
+//    )
 }
 
 
@@ -177,12 +171,10 @@ fun PokemonInformationCardPreview(){
 @Composable
 fun PokemonImage(
     modifier: Modifier = Modifier,
-    @DrawableRes pokemonImageId: Int
+    pokemonImageUrl: String
     ){
-    // Note that to load images in the ui from a remote service
-    // you will likely have to change this to AsyncImage
-    Image(
-        painter = painterResource(id = pokemonImageId),
+    AsyncImage(
+        model = pokemonImageUrl,
         contentDescription = null,
         contentScale = ContentScale.Fit,
         modifier = modifier
@@ -196,7 +188,8 @@ fun PokemonImage(
 )
 @Composable
 fun PokemonImagePreview(){
-    PokemonImage(pokemonImageId = R.drawable.ditto_front_default_sample)
+    //TODO: Add fake data
+    //PokemonImage(pokemonImageId = R.drawable.ditto_front_default_sample)
 }
 
 
