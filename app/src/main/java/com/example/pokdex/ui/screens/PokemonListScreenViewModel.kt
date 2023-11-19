@@ -53,7 +53,8 @@ class PokemonListScreenViewModel(
                         val url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${number}.png"
                         PokemonListEntry(
                             pokemonName = entry.name,
-                            pokemonImageUrl = url
+                            pokemonImageUrl = url,
+                            pokedexIndexNumber = number.toInt()
                         )
                     }
                     currentPage++

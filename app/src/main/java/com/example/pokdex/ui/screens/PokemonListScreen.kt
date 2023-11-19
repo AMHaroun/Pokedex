@@ -82,11 +82,13 @@ fun PokemonList(modifier: Modifier, uiState: PokemonListScreenUiState, paginate:
             if(it >= uiState.pokemonList.value.size - 1 && !uiState.endReached) {
                 paginate()
             }
+
+            val pokemonEntry = uiState.pokemonList.value[it]
             PokemonInformationCard(
                 modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
-                pokemonImageUrl = uiState.pokemonList.value[it].pokemonImageUrl,
-                pokemonName = uiState.pokemonList.value[it].pokemonName,
-                pokemonIndex = 123,
+                pokemonImageUrl = pokemonEntry.pokemonImageUrl,
+                pokemonName = pokemonEntry.pokemonName,
+                pokemonIndex = pokemonEntry.pokedexIndexNumber,
                 showFemaleSymbol = false,
                 showMaleSymbol = false,
                 onPokemonSaved = { /*TODO*/ },
