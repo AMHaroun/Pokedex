@@ -87,8 +87,8 @@ fun PokemonList(modifier: Modifier, uiState: PokemonListScreenUiState, paginate:
                 pokemonImageUrl = uiState.pokemonList.value[it].pokemonImageUrl,
                 pokemonName = uiState.pokemonList.value[it].pokemonName,
                 pokemonIndex = 123,
-                showFemaleSymbol = true,
-                showMaleSymbol = true,
+                showFemaleSymbol = false,
+                showMaleSymbol = false,
                 onPokemonSaved = { /*TODO*/ },
                 isPokemonSaved = true
             )
