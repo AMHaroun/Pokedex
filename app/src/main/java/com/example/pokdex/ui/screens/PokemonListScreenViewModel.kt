@@ -12,8 +12,8 @@ import com.example.pokdex.data.PokemonRepository
 import com.example.pokdex.model.PokemonListEntry
 import kotlinx.coroutines.launch
 
-data class uiState(
-    var pokemonList: List<PokemonListEntry> = listOf(),
+data class PokemonListScreenUiState(
+    var pokemonList: MutableState<List<PokemonListEntry>> = mutableStateOf(listOf()),
     var loadingErrorString: String = "",
     var loadingError: Boolean = false,
     var isLoading: Boolean = false,
@@ -25,7 +25,7 @@ class PokemonListScreenViewModel(
 ): ViewModel() {
 
     private var currentPage = 0
-    var uiState by mutableStateOf(uiState())
+    var uiState by mutableStateOf(PokemonListScreenUiState())
     private set
 
     init {
@@ -60,7 +60,7 @@ class PokemonListScreenViewModel(
                     uiState.loadingErrorString = ""
                     uiState.loadingError = false
                     uiState.isLoading = false
-                    uiState.pokemonList += pokemonEntries
+                    uiState.pokemonList.value += pokemonEntries
                 }
 
                 is Resource.Error->{

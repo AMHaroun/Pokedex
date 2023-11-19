@@ -40,13 +40,7 @@ import com.example.pokdex.ui.SearchBar
 
 
 @Composable
-fun PokemonListScreen(modifier: Modifier, viewModel: PokemonListScreenViewModel){
-
-    //TODO: Get uiState instead of the whole viewModel
-    val pokemonList by remember{viewModel.pokemonList}
-    val endReached by remember{viewModel.endReached}
-    val loadError by remember{viewModel.loadingError}
-    val isLoading by remember{viewModel.isLoading}
+fun PokemonListScreen(modifier: Modifier, uiState: PokemonListScreenUiState, pageinate: () -> Unit){
 
     Column(
         modifier = modifier.fillMaxSize()
@@ -59,25 +53,15 @@ fun PokemonListScreen(modifier: Modifier, viewModel: PokemonListScreenViewModel)
                 .fillMaxWidth()
             )
 
-        //TODO: Do error handling here and show error message composable instead of PokemonList()
-        //TODO: Extract this to a separate function PokemonList() Should be stateless
-        LazyColumn{
-            items(pokemonList.size){
-                if(it >= pokemonList.size - 1 && !endReached) {
-                    viewModel.loadPokemonPaginated()
-                }
-                PokemonInformationCard(
-                    pokemonImage = R.drawable.ditto_front_default_sample,
-                    pokemonName = pokemonList[it].pokemonName,
-                    pokemonIndex = 123,
-                    showFemaleSymbol = true,
-                    showMaleSymbol = true,
-                    onPokemonSaved = { /*TODO*/ },
-                    isPokemonSaved = true
-                )
-            }
-
+        if(uiState.loadingError){
+            Text(
+                text = uiState.loadingErrorString
+            )
+        } else {
+            PokemonList(Modifier, uiState, pageinate)
         }
+
+
 
 
     }
@@ -91,8 +75,45 @@ fun PokemonListScreen(modifier: Modifier, viewModel: PokemonListScreenViewModel)
 )
 @Composable
 fun PokemonListScreenPreview(){
+    //TODO: Add fake uiState data
     //PokemonListScreen(modifier = Modifier)
 }
+
+
+
+
+@Composable
+fun PokemonList(modifier: Modifier, uiState: PokemonListScreenUiState, pageinate:()->Unit){
+
+    LazyColumn(modifier = modifier){
+        items(uiState.pokemonList.value.size){
+            if(it >= uiState.pokemonList.value.size - 1 && !uiState.endReached) {
+                pageinate()
+            }
+            PokemonInformationCard(
+                modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
+                pokemonImage = R.drawable.ditto_front_default_sample,
+                pokemonName = uiState.pokemonList.value[it].pokemonName,
+                pokemonIndex = 123,
+                showFemaleSymbol = true,
+                showMaleSymbol = true,
+                onPokemonSaved = { /*TODO*/ },
+                isPokemonSaved = true
+            )
+        }
+
+    }
+
+}
+
+@Preview(
+    name = "PokemonList Preview"
+)
+@Composable
+fun PokemonListPreview(){
+    // Add Fake data
+}
+
 
 
 
