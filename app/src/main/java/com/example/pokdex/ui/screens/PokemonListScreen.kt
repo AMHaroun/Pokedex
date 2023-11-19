@@ -42,6 +42,7 @@ import com.example.pokdex.ui.SearchBar
 @Composable
 fun PokemonListScreen(modifier: Modifier, viewModel: PokemonListScreenViewModel){
 
+    //TODO: Get uiState instead of the whole viewModel
     val pokemonList by remember{viewModel.pokemonList}
     val endReached by remember{viewModel.endReached}
     val loadError by remember{viewModel.loadingError}
@@ -58,6 +59,8 @@ fun PokemonListScreen(modifier: Modifier, viewModel: PokemonListScreenViewModel)
                 .fillMaxWidth()
             )
 
+        //TODO: Do error handling here and show error message composable instead of PokemonList()
+        //TODO: Extract this to a separate function PokemonList() Should be stateless
         LazyColumn{
             items(pokemonList.size){
                 if(it >= pokemonList.size - 1 && !endReached) {
