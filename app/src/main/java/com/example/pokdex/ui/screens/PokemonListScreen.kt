@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -180,6 +181,7 @@ fun PokemonInformationCard(
     isPreview: Boolean = false,
 ){
     Card(
+        elevation = CardDefaults.cardElevation(8.dp),
         shape = MaterialTheme.shapes.large,
         modifier = modifier
             .fillMaxWidth()
@@ -208,7 +210,7 @@ fun PokemonInformationCard(
 )
 @Composable
 fun PokemonInformationCardPreview(){
-    // Preview Will not show the pokemon image because we are using AsyncImage in PokemonImage()
+
     PokemonInformationCard(
         modifier = Modifier,
         pokemonImageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/132.png",
@@ -254,6 +256,9 @@ fun PokemonImage(
 )
 @Composable
 fun PokemonImagePreview(){
+
+    // Even though isPreview is true, pokemonImageUrl should still be passed in order to avoid
+    // pokemonImageUrl being nullable
 
     PokemonImage(
         pokemonImageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/132.png",
