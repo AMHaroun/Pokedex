@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -91,8 +89,6 @@ fun PokemonList(modifier: Modifier, uiState: PokemonListScreenUiState, paginate:
                 pokemonImageUrl = pokemonEntry.pokemonImageUrl,
                 pokemonName = pokemonEntry.pokemonName,
                 pokemonIndex = pokemonEntry.pokedexIndexNumber,
-                showFemaleSymbol = false,
-                showMaleSymbol = false,
                 onPokemonSaved = { /*TODO*/ },
                 isPokemonSaved = true
             )
@@ -121,8 +117,6 @@ fun PokemonInformationCard(
     pokemonImageUrl: String,
     pokemonName: String,
     pokemonIndex: Int,
-    showFemaleSymbol: Boolean,
-    showMaleSymbol: Boolean,
     onPokemonSaved: ()->Unit,
     isPokemonSaved: Boolean,
 ){
@@ -140,8 +134,6 @@ fun PokemonInformationCard(
 
             PokemonInformation(
                 pokemonName = pokemonName,
-                showFemaleSymbol = showFemaleSymbol,
-                showMaleSymbol = showMaleSymbol,
                 pokemonIndex = pokemonIndex,
                 onPokemonSaved = onPokemonSaved,
                 isPokemonSaved = isPokemonSaved,
@@ -205,8 +197,6 @@ fun PokemonImagePreview(){
 fun PokemonInformation(
     modifier: Modifier = Modifier,
     pokemonName: String,
-    showFemaleSymbol: Boolean,
-    showMaleSymbol: Boolean,
     pokemonIndex: Int,
     onPokemonSaved: () -> Unit,
     isPokemonSaved: Boolean,
@@ -222,21 +212,6 @@ fun PokemonInformation(
             modifier = Modifier
                 .padding(start = dimensionResource(R.dimen.medium_padding))
         )
-
-       if(showFemaleSymbol){
-            Icon(
-                painter = painterResource(id = R.drawable.female_symbol_icon),
-                tint = Color.Magenta,
-                contentDescription = "Female symbol"
-            )
-        }
-        if(showMaleSymbol){
-            Icon(
-                painter = painterResource(id = R.drawable.male_symbol_icon),
-                tint = Color.Blue,
-                contentDescription = "Male symbol"
-            )
-        }
 
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -271,8 +246,6 @@ fun PokemonInformationPreview(){
     PokemonInformation(
         modifier = Modifier,
         pokemonName = "Ditto",
-        showFemaleSymbol = true,
-        showMaleSymbol = true,
         pokemonIndex = 123,
         onPokemonSaved = {},
         isPokemonSaved = true,
