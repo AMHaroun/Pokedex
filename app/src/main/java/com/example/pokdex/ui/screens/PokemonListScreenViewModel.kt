@@ -5,8 +5,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.pokdex.Constants
+import com.example.pokdex.PokedexApplication
 import com.example.pokdex.Resource
 import com.example.pokdex.data.PokemonRepository
 import com.example.pokdex.model.PokemonListEntry
@@ -70,6 +74,16 @@ class PokemonListScreenViewModel(
                 }
             }
 
+        }
+    }
+
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as PokedexApplication)
+                val pokedexRepository = application.container.pokemonRepository
+                PokemonListScreenViewModel(repository = pokedexRepository)
+            }
         }
     }
 
