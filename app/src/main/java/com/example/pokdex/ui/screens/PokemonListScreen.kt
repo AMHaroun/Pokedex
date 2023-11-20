@@ -1,5 +1,6 @@
 package com.example.pokdex.ui.screens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -60,6 +61,7 @@ fun PokemonListScreen(modifier: Modifier, uiState: PokemonListScreenUiState, pag
     
 }
 
+@SuppressLint("UnrememberedMutableState")
 @Preview(
     name = "PokemonListScreen Preview",
     showBackground = true,
@@ -68,7 +70,7 @@ fun PokemonListScreen(modifier: Modifier, uiState: PokemonListScreenUiState, pag
 @Composable
 fun PokemonListScreenPreview(){
     //TODO: Add fake uiState data
-    //PokemonListScreen(modifier = Modifier)
+    // PokemonListScreen()
 }
 
 
@@ -179,6 +181,8 @@ fun PokemonImage(
         model = pokemonImageUrl,
         contentDescription = null,
         contentScale = ContentScale.Fit,
+        placeholder = painterResource(id = R.drawable.loading_img),
+        error = painterResource(id = R.drawable.ic_broken_image),
         modifier = modifier
             .clip(MaterialTheme.shapes.medium)
     )
