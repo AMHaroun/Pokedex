@@ -1,6 +1,7 @@
 package com.example.pokdex.ui.screens
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,7 +14,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,7 +34,12 @@ import com.example.pokdex.ui.SearchBar
 
 
 @Composable
-fun PokemonListScreen(modifier: Modifier, uiState: PokemonListScreenUiState, paginate: () -> Unit){
+fun PokemonListScreen(
+    modifier: Modifier = Modifier,
+    uiState: PokemonListScreenUiState,
+    paginate: () -> Unit,
+    isPreview: Boolean = false
+){
 
     Column(
         modifier = modifier.fillMaxSize()
@@ -52,7 +57,7 @@ fun PokemonListScreen(modifier: Modifier, uiState: PokemonListScreenUiState, pag
                 text = uiState.loadingErrorString
             )
         } else {
-            PokemonList(Modifier, uiState, paginate)
+            PokemonList(Modifier, uiState, paginate, isPreview)
         }
 
 
@@ -70,15 +75,41 @@ fun PokemonListScreen(modifier: Modifier, uiState: PokemonListScreenUiState, pag
 )
 @Composable
 fun PokemonListScreenPreview(){
-    //TODO: Add fake uiState data
-    // PokemonListScreen()
+
+    PokemonListScreen(
+        isPreview = true,
+        uiState = PokemonListScreenUiState(
+            pokemonList = mutableStateOf(
+                listOf(
+                    PokemonListEntry(
+                        pokemonName = "Ditto",
+                        pokemonImageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/132.png",
+                        pokedexIndexNumber = 123
+                    ),
+                    PokemonListEntry(
+                        pokemonName = "Ditto",
+                        pokemonImageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/132.png",
+                        pokedexIndexNumber = 321
+                    )
+
+                )
+            )
+        ),
+        paginate = {}
+    )
+
 }
 
 
 
 
 @Composable
-fun PokemonList(modifier: Modifier, uiState: PokemonListScreenUiState, paginate:()->Unit){
+fun PokemonList(
+    modifier: Modifier,
+    uiState: PokemonListScreenUiState,
+    paginate:()->Unit,
+    isPreview: Boolean = false
+){
 
     LazyColumn(modifier = modifier){
         items(uiState.pokemonList.value.size){
@@ -93,7 +124,8 @@ fun PokemonList(modifier: Modifier, uiState: PokemonListScreenUiState, paginate:
                 pokemonName = pokemonEntry.pokemonName,
                 pokemonIndex = pokemonEntry.pokedexIndexNumber,
                 onPokemonSaved = { /*TODO*/ },
-                isPokemonSaved = true
+                isPokemonSaved = true,
+                isPreview = isPreview
             )
         }
 
@@ -110,6 +142,7 @@ fun PokemonList(modifier: Modifier, uiState: PokemonListScreenUiState, paginate:
 fun PokemonListPreview(){
     PokemonList(
         modifier = Modifier,
+        isPreview = true,
         uiState = PokemonListScreenUiState(
             pokemonList = mutableStateOf(
                     listOf(
@@ -119,8 +152,8 @@ fun PokemonListPreview(){
                         pokedexIndexNumber = 123
                     ),
                     PokemonListEntry(
-                        pokemonName = "Bulbasaur",
-                        pokemonImageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/1.png",
+                        pokemonName = "Ditto",
+                        pokemonImageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/132.png",
                         pokedexIndexNumber = 321
                     )
 
@@ -144,6 +177,7 @@ fun PokemonInformationCard(
     pokemonIndex: Int,
     onPokemonSaved: ()->Unit,
     isPokemonSaved: Boolean,
+    isPreview: Boolean = false,
 ){
     Card(
         shape = MaterialTheme.shapes.large,
@@ -154,6 +188,7 @@ fun PokemonInformationCard(
         Row{
             PokemonImage(
                 pokemonImageUrl = pokemonImageUrl,
+                isPreview = isPreview,
                 modifier = Modifier.padding(start = dimensionResource(id = R.dimen.small_padding))
                 )
 
@@ -181,6 +216,7 @@ fun PokemonInformationCardPreview(){
         pokemonIndex = 234,
         onPokemonSaved = {},
         isPokemonSaved = true,
+        isPreview = true
     )
 }
 
@@ -190,17 +226,26 @@ fun PokemonInformationCardPreview(){
 @Composable
 fun PokemonImage(
     modifier: Modifier = Modifier,
-    pokemonImageUrl: String
-    ){
-    AsyncImage(
-        model = pokemonImageUrl,
-        contentDescription = null,
-        contentScale = ContentScale.Fit,
-        placeholder = painterResource(id = R.drawable.loading_img),
-        error = painterResource(id = R.drawable.ic_broken_image),
-        modifier = modifier
-            .clip(MaterialTheme.shapes.medium)
-    )
+    pokemonImageUrl: String,
+    isPreview: Boolean = false
+){
+
+    if(isPreview){
+        Image(
+            painter = painterResource(id = R.drawable.ditto_front_default_sample),
+            contentDescription = null
+        )
+    } else {
+        AsyncImage(
+            model = pokemonImageUrl,
+            contentDescription = null,
+            contentScale = ContentScale.Fit,
+            placeholder = painterResource(id = R.drawable.loading_img),
+            error = painterResource(id = R.drawable.ic_broken_image),
+            modifier = modifier
+                .clip(MaterialTheme.shapes.medium)
+        )
+    }
     
 }
 
@@ -209,9 +254,10 @@ fun PokemonImage(
 )
 @Composable
 fun PokemonImagePreview(){
-    // Preview will not show image because we are using AsyncImage
+
     PokemonImage(
-        pokemonImageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/132.png"
+        pokemonImageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/132.png",
+        isPreview = true
     )
 }
 
