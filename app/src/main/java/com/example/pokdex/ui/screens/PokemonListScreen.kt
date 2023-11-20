@@ -13,6 +13,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -26,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.pokdex.R
+import com.example.pokdex.model.PokemonListEntry
 import com.example.pokdex.ui.HeartSaveButton
 import com.example.pokdex.ui.SearchBar
 
@@ -98,13 +101,35 @@ fun PokemonList(modifier: Modifier, uiState: PokemonListScreenUiState, paginate:
 
 }
 
+@SuppressLint("UnrememberedMutableState")
 @Preview(
-    name = "PokemonList Preview"
+    name = "PokemonList Preview",
+    showBackground = true
 )
 @Composable
 fun PokemonListPreview(){
-    // TODO: Add Fake data
-    // PokemonList()
+    PokemonList(
+        modifier = Modifier,
+        uiState = PokemonListScreenUiState(
+            pokemonList = mutableStateOf(
+                    listOf(
+                    PokemonListEntry(
+                        pokemonName = "Ditto",
+                        pokemonImageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/132.png",
+                        pokedexIndexNumber = 123
+                    ),
+                    PokemonListEntry(
+                        pokemonName = "Bulbasaur",
+                        pokemonImageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/1.png",
+                        pokedexIndexNumber = 321
+                    )
+
+                )
+            )
+        ),
+        paginate = {}
+    )
+
 }
 
 
@@ -148,17 +173,15 @@ fun PokemonInformationCard(
 )
 @Composable
 fun PokemonInformationCardPreview(){
-    // TODO: Add fake data
-//    PokemonInformationCard(
-//        modifier = Modifier,
-//        pokemonImageUrl = R.drawable.ditto_front_default_sample,
-//        pokemonName = "Ditto",
-//        pokemonIndex = 234,
-//        showFemaleSymbol = true,
-//        showMaleSymbol = true,
-//        onPokemonSaved = {},
-//        isPokemonSaved = true,
-//    )
+    // Preview Will not show the pokemon image because we are using AsyncImage in PokemonImage()
+    PokemonInformationCard(
+        modifier = Modifier,
+        pokemonImageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/132.png",
+        pokemonName = "Ditto",
+        pokemonIndex = 234,
+        onPokemonSaved = {},
+        isPokemonSaved = true,
+    )
 }
 
 
@@ -186,8 +209,10 @@ fun PokemonImage(
 )
 @Composable
 fun PokemonImagePreview(){
-    //TODO: Add fake data
-    //PokemonImage(pokemonImageId = R.drawable.ditto_front_default_sample)
+    // Preview will not show image because we are using AsyncImage
+    PokemonImage(
+        pokemonImageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/132.png"
+    )
 }
 
 
