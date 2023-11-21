@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -40,7 +41,6 @@ import com.example.pokdex.ui.SearchBar
 fun PokemonListScreen(
     modifier: Modifier = Modifier,
     viewModel: PokemonListScreenViewModel = viewModel<PokemonListScreenViewModel>(factory = PokemonListScreenViewModel.Factory),
-    isPreview: Boolean = false,
     previewUiState: PokemonListScreenUiState? = null
 ){
 
@@ -62,7 +62,7 @@ fun PokemonListScreen(
                 text = uiState.loadingErrorString
             )
         } else {
-            PokemonList(Modifier, uiState, {viewModel.loadPokemonPaginated()}, isPreview)
+            PokemonList(Modifier, uiState, {viewModel.loadPokemonPaginated()} )
         }
     }
     
@@ -79,7 +79,6 @@ fun PokemonListScreen(
 fun PokemonListScreenPreview(){
 
     PokemonListScreen(
-        isPreview = true,
         previewUiState = PokemonListScreenUiState(
             pokemonList = mutableStateOf(
                 listOf(
@@ -109,7 +108,6 @@ fun PokemonList(
     modifier: Modifier,
     uiState: PokemonListScreenUiState,
     paginate:()->Unit,
-    isPreview: Boolean = false
 ){
 
     LazyColumn(modifier = modifier){
@@ -126,7 +124,6 @@ fun PokemonList(
                 pokemonIndex = pokemonEntry.pokedexIndexNumber,
                 onPokemonSaved = { /*TODO*/ },
                 isPokemonSaved = true,
-                isPreview = isPreview
             )
         }
 
@@ -143,7 +140,6 @@ fun PokemonList(
 fun PokemonListPreview(){
     PokemonList(
         modifier = Modifier,
-        isPreview = true,
         uiState = PokemonListScreenUiState(
             pokemonList = mutableStateOf(
                     listOf(
@@ -178,7 +174,6 @@ fun PokemonInformationCard(
     pokemonIndex: Int,
     onPokemonSaved: ()->Unit,
     isPokemonSaved: Boolean,
-    isPreview: Boolean = false,
 ){
     Card(
         elevation = CardDefaults.cardElevation(8.dp),
@@ -190,7 +185,6 @@ fun PokemonInformationCard(
         Row{
             PokemonImage(
                 pokemonImageUrl = pokemonImageUrl,
-                isPreview = isPreview,
                 modifier = Modifier.padding(start = dimensionResource(id = R.dimen.small_padding))
                 )
 
@@ -218,7 +212,6 @@ fun PokemonInformationCardPreview(){
         pokemonIndex = 234,
         onPokemonSaved = {},
         isPokemonSaved = true,
-        isPreview = true
     )
 }
 
@@ -229,10 +222,9 @@ fun PokemonInformationCardPreview(){
 fun PokemonImage(
     modifier: Modifier = Modifier,
     pokemonImageUrl: String,
-    isPreview: Boolean = false
 ){
 
-    if(isPreview){
+    if(LocalInspectionMode.current){
         Image(
             painter = painterResource(id = R.drawable.ditto_front_default_sample),
             contentDescription = null
@@ -257,13 +249,13 @@ fun PokemonImage(
 @Composable
 fun PokemonImagePreview(){
 
-    // Even though isPreview is true, pokemonImageUrl should still be passed in order to avoid
-    // pokemonImageUrl being nullable
+    // Even though we are in a preview and we will not being using the Url to make load the image
+    // we pass it in here to avoid making it nullable
 
     PokemonImage(
         pokemonImageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/132.png",
-        isPreview = true
     )
+
 }
 
 
