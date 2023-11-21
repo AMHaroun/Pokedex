@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    PokedexApp(modifier = Modifier, owner = this)
+                    PokedexApp(modifier = Modifier)
                 }
             }
         }
