@@ -40,7 +40,7 @@ import com.example.pokdex.ui.SearchBar
 @Composable
 fun PokemonListScreen(
     modifier: Modifier = Modifier,
-    viewModel: PokemonListScreenViewModel = viewModel<PokemonListScreenViewModel>(factory = PokemonListScreenViewModel.Factory),
+    viewModel: PokemonListScreenViewModel = viewModel(factory = PokemonListScreenViewModel.Factory),
     previewUiState: PokemonListScreenUiState? = null
 ){
 
@@ -51,7 +51,7 @@ fun PokemonListScreen(
     ) {
         SearchBar(
             hint = stringResource(R.string.search_bar_hint),
-            onValueChange = {},
+            onSearch = {},
             modifier = Modifier
                 .padding(top = dimensionResource(id = R.dimen.small_padding))
                 .fillMaxWidth()
@@ -62,7 +62,9 @@ fun PokemonListScreen(
                 text = uiState.loadingErrorString
             )
         } else {
-            PokemonList(Modifier, uiState, {viewModel.loadPokemonPaginated()} )
+            PokemonList(Modifier, uiState ){
+                viewModel.loadPokemonPaginated()
+            }
         }
     }
     

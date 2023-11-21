@@ -9,7 +9,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,15 +51,21 @@ fun HeartSaveButtonPreview(){
 fun SearchBar(
     modifier: Modifier = Modifier,
     hint: String,
-    onValueChange: ()->Unit
+    onSearch: (String)->Unit
 ){
+    var text by remember{ mutableStateOf("") }
+
     OutlinedTextField(
-        value = hint,
-        onValueChange = {onValueChange()},
+        value = text,
+        onValueChange = {
+            text = it
+            onSearch(text)
+        },
         shape = MaterialTheme.shapes.extraLarge,
         leadingIcon = {
             Icon(imageVector = Icons.Default.Search, contentDescription = "Search")
         },
+        placeholder = {Text(hint)},
         modifier = modifier
     )
 
@@ -66,7 +77,7 @@ fun SearchBar(
 )
 @Composable
 fun SearchBarPreview(){
-    SearchBar(hint = "Search", onValueChange = {})
+    SearchBar(hint = "Search", onSearch = {})
 }
 
 
