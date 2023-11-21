@@ -2,6 +2,7 @@ package com.example.pokdex.ui.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,6 +31,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.pokdex.R
 import com.example.pokdex.model.PokemonListEntry
@@ -40,6 +43,7 @@ import com.example.pokdex.ui.SearchBar
 @Composable
 fun PokemonListScreen(
     modifier: Modifier = Modifier,
+    navController: NavController,
     viewModel: PokemonListScreenViewModel = viewModel(factory = PokemonListScreenViewModel.Factory),
     previewUiState: PokemonListScreenUiState? = null
 ){
@@ -64,9 +68,15 @@ fun PokemonListScreen(
                 text = uiState.loadingErrorString
             )
         } else {
-            PokemonList(Modifier, uiState){
-                viewModel.loadPokemonPaginated()
-            }
+
+            PokemonList(
+                modifier = Modifier,
+                uiState = uiState,
+                navigateToDetailScreen = { navController.navigate("PokemonDetailScreen") },
+                paginate = { viewModel.loadPokemonPaginated() }
+            )
+
+
         }
     }
     
@@ -83,6 +93,7 @@ fun PokemonListScreen(
 fun PokemonListScreenPreview(){
 
     PokemonListScreen(
+        navController = rememberNavController(),
         previewUiState = PokemonListScreenUiState(
             pokemonList = mutableStateOf(
                 listOf(
@@ -111,6 +122,7 @@ fun PokemonListScreenPreview(){
 fun PokemonList(
     modifier: Modifier,
     uiState: PokemonListScreenUiState,
+    navigateToDetailScreen:()->Unit,
     paginate:()->Unit,
 ){
 
@@ -122,7 +134,9 @@ fun PokemonList(
 
             val pokemonEntry = uiState.pokemonList.value[it]
             PokemonInformationCard(
-                modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
+                modifier = Modifier
+                    .padding(top = 8.dp, bottom = 8.dp)
+                    .clickable { navigateToDetailScreen() },
                 pokemonImageUrl = pokemonEntry.pokemonImageUrl,
                 pokemonName = pokemonEntry.pokemonName,
                 pokemonIndex = pokemonEntry.pokedexIndexNumber,
@@ -144,6 +158,7 @@ fun PokemonList(
 fun PokemonListPreview(){
     PokemonList(
         modifier = Modifier,
+        navigateToDetailScreen = {},
         uiState = PokemonListScreenUiState(
             pokemonList = mutableStateOf(
                     listOf(
