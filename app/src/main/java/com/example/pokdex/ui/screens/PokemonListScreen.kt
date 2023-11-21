@@ -39,13 +39,12 @@ import com.example.pokdex.ui.SearchBar
 @Composable
 fun PokemonListScreen(
     modifier: Modifier = Modifier,
+    viewModel: PokemonListScreenViewModel = viewModel<PokemonListScreenViewModel>(factory = PokemonListScreenViewModel.Factory),
     isPreview: Boolean = false,
     previewUiState: PokemonListScreenUiState? = null
 ){
 
-    val viewModel: PokemonListScreenViewModel = viewModel(factory = PokemonListScreenViewModel.Factory)
     val uiState = remember{ viewModel.uiState }
-
 
     Column(
         modifier = modifier.fillMaxSize()
@@ -65,10 +64,6 @@ fun PokemonListScreen(
         } else {
             PokemonList(Modifier, uiState, {viewModel.loadPokemonPaginated()}, isPreview)
         }
-
-
-
-
     }
     
 }
