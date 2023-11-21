@@ -15,6 +15,7 @@ import com.example.pokdex.PokedexApplication
 import com.example.pokdex.Resource
 import com.example.pokdex.data.PokemonRepository
 import com.example.pokdex.model.PokemonListEntry
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 data class PokemonListScreenUiState(
@@ -30,11 +31,41 @@ class PokemonListScreenViewModel(
 ): ViewModel() {
 
     private var currentPage = 0
+
+    private var cachedPokemonList: List<PokemonListEntry> = listOf()
+    private var isSearchStarting = true
+    var isSearching = mutableStateOf(false)
+
     var uiState by mutableStateOf(PokemonListScreenUiState())
     private set
 
     init {
         loadPokemonPaginated()
+    }
+    fun searchPokemonList(searchQuery: String){
+        val listToSearch = if(isSearchStarting) {
+            uiState.pokemonList.value
+        } else {
+            cachedPokemonList
+        }
+        viewModelScope.launch(Dispatchers.Default) {
+            if(searchQuery.isEmpty()) {
+                uiState.pokemonList.value = cachedPokemonList
+                isSearching.value = false
+                isSearchStarting = true
+                return@launch
+            }
+            val results = listToSearch.filter {
+                it.pokemonName.contains(searchQuery.trim(), ignoreCase = true) ||
+                        it.pokedexIndexNumber.toString() == searchQuery.trim()
+            }
+            if(isSearchStarting) {
+                cachedPokemonList = uiState.pokemonList.value
+                isSearchStarting = false
+            }
+            uiState.pokemonList.value = results
+            isSearching.value = true
+        }
     }
     fun loadPokemonPaginated(){
 

@@ -51,7 +51,9 @@ fun PokemonListScreen(
     ) {
         SearchBar(
             hint = stringResource(R.string.search_bar_hint),
-            onSearch = {},
+            onSearch = {
+                viewModel.searchPokemonList(it)
+            },
             modifier = Modifier
                 .padding(top = dimensionResource(id = R.dimen.small_padding))
                 .fillMaxWidth()
@@ -62,7 +64,7 @@ fun PokemonListScreen(
                 text = uiState.loadingErrorString
             )
         } else {
-            PokemonList(Modifier, uiState ){
+            PokemonList(Modifier, uiState){
                 viewModel.loadPokemonPaginated()
             }
         }
