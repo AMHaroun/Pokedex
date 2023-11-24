@@ -72,7 +72,7 @@ fun PokemonListScreen(
             PokemonList(
                 modifier = Modifier,
                 uiState = uiState,
-                navigateToDetailScreen = { navController.navigate("PokemonDetailScreen/{Ditto}") },
+                navController = navController,
                 paginate = { viewModel.loadPokemonPaginated() }
             )
 
@@ -122,7 +122,7 @@ fun PokemonListScreenPreview(){
 fun PokemonList(
     modifier: Modifier,
     uiState: PokemonListScreenUiState,
-    navigateToDetailScreen:()->Unit,
+    navController: NavController,
     paginate:()->Unit,
 ){
 
@@ -136,7 +136,11 @@ fun PokemonList(
             PokemonInformationCard(
                 modifier = Modifier
                     .padding(top = 8.dp, bottom = 8.dp)
-                    .clickable { navigateToDetailScreen() },
+                    .clickable {
+                        navController.navigate(
+                            "PokemonDetailScreen/${pokemonEntry.pokemonName.lowercase()}"
+                        )
+                    },
                 pokemonImageUrl = pokemonEntry.pokemonImageUrl,
                 pokemonName = pokemonEntry.pokemonName,
                 pokemonIndex = pokemonEntry.pokedexIndexNumber,
@@ -158,7 +162,7 @@ fun PokemonList(
 fun PokemonListPreview(){
     PokemonList(
         modifier = Modifier,
-        navigateToDetailScreen = {},
+        navController = rememberNavController(),
         uiState = PokemonListScreenUiState(
             pokemonList = mutableStateOf(
                     listOf(
