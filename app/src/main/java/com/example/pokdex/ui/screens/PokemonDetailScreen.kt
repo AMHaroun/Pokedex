@@ -6,6 +6,7 @@ import androidx.navigation.NavController
 
 @Composable
 fun PokemonDetailScreen(
+    pokemonName: String,
     navController: NavController,
     modifier: Modifier = Modifier
 ){
