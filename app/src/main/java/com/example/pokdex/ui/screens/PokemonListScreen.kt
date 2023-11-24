@@ -72,7 +72,7 @@ fun PokemonListScreen(
             PokemonList(
                 modifier = Modifier,
                 uiState = uiState,
-                navigateToDetailScreen = { navController.navigate("PokemonDetailScreen") },
+                navigateToDetailScreen = { navController.navigate("PokemonDetailScreen/{Ditto}") },
                 paginate = { viewModel.loadPokemonPaginated() }
             )
 
