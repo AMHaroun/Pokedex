@@ -35,6 +35,10 @@ class PokemonDetailScreenViewModel(val repository: PokemonRepository): ViewModel
 
                 is Resource.Success ->{
 
+                    /* We don't show all the data that the api provides us, if we need to
+                    *  show more data to the ui we can extend the Pokemon data class in the model
+                    *  package & then provide the new arguments here */
+
                     val pokemon = Pokemon(
                         height = result.data.height,
                         id = result.data.id,
