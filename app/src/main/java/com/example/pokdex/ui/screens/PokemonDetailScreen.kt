@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.pokdex.ui.LoadingSpinner
@@ -18,11 +19,15 @@ fun PokemonDetailScreen(
     navController: NavController,
     modifier: Modifier = Modifier
 ){
-    val uiState = remember{ viewModel.uiState }
+
+    val uiState = viewModel.uiState
+    viewModel.getPokemonData(pokemonName)
 
     when(uiState){
 
         is PokemonDetailScreenUiState.Success->{
+
+                PokemonDetails(uiState = uiState)
 
         }
 
@@ -39,10 +44,15 @@ fun PokemonDetailScreen(
 
         is PokemonDetailScreenUiState.Error->{
 
-            NetworkErrorMessage(
-                errorMessage = uiState.errorMessage,
-                onRetry = { viewModel.getPokemonData(pokemonName) }
-            )
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                NetworkErrorMessage(
+                    errorMessage = uiState.errorMessage,
+                    onRetry = { viewModel.getPokemonData(pokemonName) }
+                )
+            }
 
         }
 
@@ -55,7 +65,24 @@ fun PokemonDetailScreen(
 
 @Composable
 fun PokemonDetails(
+    uiState: PokemonDetailScreenUiState.Success,
     modifier: Modifier = Modifier
 ){
+
+    Column {
+
+        PokemonImage(pokemonImageUrl = uiState.pokemon.imageUrl)
+
+    }
+}
+
+@Preview(
+    name = "PokemonDetails Preview",
+    showBackground = true
+)
+@Composable
+fun PokemonDetailsPreview(){
+
+    //TODO: Call PokemonDetails()
 
 }

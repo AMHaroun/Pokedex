@@ -45,7 +45,8 @@ class PokemonDetailScreenViewModel(val repository: PokemonRepository): ViewModel
                         name = result.data.name,
                         stats = result.data.stats,
                         types = result.data.types,
-                        weight = result.data.weight
+                        weight = result.data.weight,
+                        imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${result.data.id}.png"
                     )
 
                     uiState = PokemonDetailScreenUiState.Success(pokemon)
