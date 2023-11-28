@@ -2,6 +2,7 @@ package com.example.pokdex.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -23,10 +24,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun HeartSaveButton(
@@ -111,7 +114,7 @@ fun NetworkErrorMessage(
             style = MaterialTheme.typography.labelLarge
         )
 
-        Button(onClick = { onRetry }) {
+        Button(onClick = { onRetry() }) {
             Text(text = "Retry")
         }
 
@@ -157,7 +160,8 @@ fun BackButton(navigateBack: ()->Unit, modifier: Modifier = Modifier){
     IconButton(onClick = { navigateBack() }, modifier = modifier) {
         Icon(
             imageVector = Icons.Default.KeyboardArrowLeft,
-            contentDescription = "Back button"
+            contentDescription = "Back button",
+            modifier = Modifier.size(50.dp).alpha(0.7f)
         )
     }
 
