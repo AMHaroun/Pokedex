@@ -9,6 +9,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.pokdex.model.Pokemon
+import com.example.pokdex.network.responses.Stat
+import com.example.pokdex.network.responses.StatX
+import com.example.pokdex.network.responses.Type
+import com.example.pokdex.network.responses.TypeX
+import com.example.pokdex.ui.BackButton
 import com.example.pokdex.ui.LoadingSpinner
 import com.example.pokdex.ui.NetworkErrorMessage
 
@@ -26,8 +32,9 @@ fun PokemonDetailScreen(
     when(uiState){
 
         is PokemonDetailScreenUiState.Success->{
-
-                PokemonDetails(uiState = uiState)
+            Column {
+                BackButton(navigateBack = { navController.popBackStack() })
+            }
 
         }
 
@@ -71,8 +78,6 @@ fun PokemonDetails(
 
     Column {
 
-        PokemonImage(pokemonImageUrl = uiState.pokemon.imageUrl)
-
     }
 }
 
@@ -83,6 +88,22 @@ fun PokemonDetails(
 @Composable
 fun PokemonDetailsPreview(){
 
-    //TODO: Call PokemonDetails()
+    PokemonDetails(
+        uiState = PokemonDetailScreenUiState.Success(
+            pokemon = Pokemon(
+                height = 10,
+                id = 123,
+                name = "Ditto",
+                stats = listOf(
+                    Stat(10, 10, StatX("ExampleStatX", "StatXUrl")),
+                ),
+                types = listOf(
+                    Type(10, TypeX("ExampleTypeX", "TypeXUrl")),
+                ),
+                weight = 10,
+                imageUrl = "imageUrl"
+            )
+        )
+    )
 
 }
