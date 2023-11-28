@@ -1,6 +1,11 @@
 package com.example.pokdex.network.responses
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class GameIndice(
-    val game_index: Int,
+    @SerialName(value = "game_index")
+    val gameIndex: Int,
     val version: Version
 )
