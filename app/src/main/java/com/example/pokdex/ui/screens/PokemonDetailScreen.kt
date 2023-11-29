@@ -117,17 +117,36 @@ fun PokemonDetailsPreview(){
         navigateBack = {},
         uiState = PokemonDetailScreenUiState.Success(
             pokemon = Pokemon(
-                height = 10,
-                id = 123,
+                height = 3,
+                weight = 40,
+                id = 132,
                 name = "Ditto",
                 stats = listOf(
-                    Stat(10, 10, StatX("ExampleStatX", "StatXUrl")),
+                    Stat(48, 1,
+                        StatX("hp", "https://pokeapi.co/api/v2/stat/1/")
+                    ),
+                    Stat(48, 0,
+                        StatX("attack", "https://pokeapi.co/api/v2/stat/2/" )
+                    ),
+                    Stat(48, 0,
+                        StatX("defense", "https://pokeapi.co/api/v2/stat/3/")
+                    ),
+                    Stat(48,0,
+                        StatX("special-attack", "https://pokeapi.co/api/v2/stat/4/")
+                    ),
+                    Stat(48, 0,
+                        StatX("special-defense", "https://pokeapi.co/api/v2/stat/5/")
+                    ),
+                    Stat(48, 0,
+                        StatX("speed", "https://pokeapi.co/api/v2/stat/6/")
+                    )
                 ),
                 types = listOf(
-                    Type(10, TypeX("ExampleTypeX", "TypeXUrl")),
+                    Type(1,
+                        TypeX("normal", "https://pokeapi.co/api/v2/type/1")
+                    ),
                 ),
-                weight = 10,
-                imageUrl = "imageUrl"
+                imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/132.svg"
             )
         )
     )
@@ -229,17 +248,36 @@ fun PokemonDetailsCardPreview(){
     PokemonDetailsCard(
         uiState = PokemonDetailScreenUiState.Success(
             pokemon = Pokemon(
-                height = 10,
-                id = 123,
+                height = 3,
+                weight = 40,
+                id = 132,
                 name = "Ditto",
                 stats = listOf(
-                    Stat(10, 10, StatX("ExampleStatX", "StatXUrl")),
+                    Stat(48, 1,
+                        StatX("hp", "https://pokeapi.co/api/v2/stat/1/")
+                    ),
+                    Stat(48, 0,
+                        StatX("attack", "https://pokeapi.co/api/v2/stat/2/" )
+                    ),
+                    Stat(48, 0,
+                        StatX("defense", "https://pokeapi.co/api/v2/stat/3/")
+                    ),
+                    Stat(48,0,
+                        StatX("special-attack", "https://pokeapi.co/api/v2/stat/4/")
+                    ),
+                    Stat(48, 0,
+                        StatX("special-defense", "https://pokeapi.co/api/v2/stat/5/")
+                    ),
+                    Stat(48, 0,
+                        StatX("speed", "https://pokeapi.co/api/v2/stat/6/")
+                    )
                 ),
                 types = listOf(
-                    Type(10, TypeX("ExampleTypeX", "TypeXUrl")),
+                    Type(1,
+                        TypeX("normal", "https://pokeapi.co/api/v2/type/1")
+                    ),
                 ),
-                weight = 10,
-                imageUrl = "imageUrl"
+                imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/132.svg"
             )
         )
     )
