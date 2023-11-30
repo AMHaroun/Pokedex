@@ -1,14 +1,20 @@
 package com.example.pokdex.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -16,6 +22,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -96,8 +104,20 @@ fun PokemonDetails(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
+        Column(modifier = Modifier.fillMaxWidth()) {
             BackButton(navigateBack = { navigateBack() })
+            Text(
+                text = "#${uiState.pokemon.id} - National Pokédex",
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+            Text(
+                text = uiState.pokemon.name,
+                style = MaterialTheme.typography.headlineLarge,
+                fontWeight = FontWeight.ExtraBold,
+                modifier = Modifier.padding(start = 16.dp)
+            )
         }
         PokemonImage(pokemonImageUrl = uiState.pokemon.imageUrl)
         PokemonDetailsCard(uiState = uiState, modifier = Modifier.padding(20.dp))
@@ -161,81 +181,92 @@ fun PokemonDetailsCard(modifier: Modifier = Modifier, uiState: PokemonDetailScre
     Card(
         modifier = modifier.fillMaxSize()
     ) {
-        Row(modifier = Modifier.fillMaxWidth()) {
+       Row(
+           horizontalArrangement = Arrangement.Center,
+           verticalAlignment = Alignment.CenterVertically,
+           modifier = Modifier
+               .fillMaxWidth()
+               .height(128.dp)
+       ){
+           Column(horizontalAlignment = Alignment.CenterHorizontally) {
+               Icon(
+                   painter = painterResource(id = R.drawable.weight_icon),
+                   contentDescription = "Pokemon weight",
+                   modifier = Modifier.size(64.dp)
+               )
+               Text(
+                   text = "${uiState.pokemon.weight} lbs",
+                   style = MaterialTheme.typography.labelLarge,
+                   fontWeight = FontWeight.Bold
+               )
+           }
 
-            Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.Start) {
-                Icon(
-                    painter = painterResource(R.drawable.height_icon),
-                    contentDescription = "Pokemon height",
+           Spacer(modifier = Modifier.size(64.dp))
+
+           Column(horizontalAlignment = Alignment.CenterHorizontally) {
+               Icon(
+                   painter = painterResource(id = R.drawable.height_icon),
+                   contentDescription = "Pokemon height",
+                   modifier = Modifier.size(64.dp)
+               )
+               Text(
+                   text = "${uiState.pokemon.height} ft",
+                   style = MaterialTheme.typography.labelLarge,
+                   fontWeight = FontWeight.Bold
+               )
+           }
+       }
+
+        LazyRow(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(64.dp)
+        ) {
+            items(uiState.pokemon.types.size) {
+                val pokemonType = uiState.pokemon.types[it]
+
+                Box(
+                    contentAlignment = Alignment.Center,
                     modifier = Modifier
-                        .padding(start = 16.dp)
-                        .size(50.dp)
-                )
-                Text(
-                    text = "${uiState.pokemon.height} m",
-                    style = MaterialTheme.typography.titleLarge
-                )
-            }
+                        .padding(8.dp)
+                        .clip(CircleShape)
+                        //TODO: Provide pokemonTypes specific color here
+                        .background(Color.LightGray)
+                ) {
+                    Text(
+                        text = pokemonType.type.name.uppercase(),
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                    )
 
-            Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(
-                    text = uiState.pokemon.name,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = "#${uiState.pokemon.id}",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
-                )
-            }
+                }
 
-            Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
-                Icon(
-                    painter = painterResource(id = R.drawable.weight_icon),
-                    contentDescription = "Pokemon weight",
-                    modifier = Modifier
-                        .padding(end = 16.dp)
-                        .size(55.dp)
-                )
-
-                Text(
-                    text = "${uiState.pokemon.weight} kg",
-                    style = MaterialTheme.typography.titleLarge,
-                )
-            }
-
-        }
-
-        LazyRow(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
-            items(uiState.pokemon.types.size){
-                Text(
-                    text = uiState.pokemon.types[it].type.name,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(24.dp)
-                )
             }
 
         }
 
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.Start,
+            modifier = Modifier
         ) {
+            items(uiState.pokemon.stats.size) {
+                val pokemonStat = uiState.pokemon.stats[it]
 
-            items(uiState.pokemon.stats.size){
                 Text(
-                    text = uiState.pokemon.stats[it].stat.name,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(top = 16.dp)
+                    text = pokemonStat.stat.name.uppercase(),
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(horizontal = 16.dp)
                 )
             }
+
         }
 
     }
+
 
 }
 
@@ -282,4 +313,44 @@ fun PokemonDetailsCardPreview(){
         )
     )
 
+}
+
+
+
+@Composable
+fun PokemonStatBar(
+    statValue: Int,
+    statMaxValue: Int,
+    statBarColor: Color,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(24.dp)
+            .clip(CircleShape)
+            .background(Color.LightGray)
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth(statValue / statMaxValue.toFloat())
+                // statValue/statMaxValue.toFloat() determines how much of the bar is filled
+                .clip(CircleShape)
+                .background(statBarColor)
+                .padding(horizontal = 8.dp)
+        ) {
+            Text(
+                text = statValue.toString(),
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+fun PokemonStatBarPreview(){
+    PokemonStatBar(statValue = 10, statMaxValue = 100, statBarColor = Color.Blue)
 }
