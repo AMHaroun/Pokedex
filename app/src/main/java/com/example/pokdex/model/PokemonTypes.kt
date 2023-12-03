@@ -4,24 +4,24 @@ import androidx.compose.ui.graphics.Color
 import com.example.pokdex.model.PokemonTypes.*
 
 enum class PokemonTypes(val color: Color) {
-    GROUND(Color(0xFFE0C068)),
-    GRASS(Color(0xFF78C850)),
-    POISON(Color(0xFFA040A0)),
-    FIRE(Color(0xFFf08030)),
-    FLYING(Color(0xFFA890F0)),
-    WATER(Color(0xFF78C850)),
-    BUG(Color(0xFFA8B820)),
-    NORMAL(Color(0xFFA8A878)),
-    ELECTRIC(Color(0xFF78C850)),
-    ICE(Color(0xFF98D8D8)),
-    FIGHTING(Color(0xFFC03028)),
-    PSYCHIC(Color(0xFFF85888)),
-    ROCK(Color(0xFFB8A038)),
-    GHOST(Color(0xFF705898)),
-    DRAGON(Color(0xFF7038F8)),
-    DARK(Color(0xFF705848)),
-    STEEL(Color(0xFFB8B8D0)),
-    FAIRY(Color(0xFFEE99AC))
+    GROUND(Color(0xFFCC9F4F)),
+    GRASS(Color(0xFF71C558)),
+    POISON(Color(0xFFB468B7)),
+    FIRE(Color(0xFFEA7A3C)),
+    FLYING(Color(0xFF7DA6DE)),
+    WATER(Color(0xFF539AE2)),
+    BUG(Color(0xFF94BC4A)),
+    NORMAL(Color(0xFFAAB09F)),
+    ELECTRIC(Color(0xFFE5C531)),
+    ICE(Color(0xFF70CBD4)),
+    FIGHTING(Color(0xFFCB5F48)),
+    PSYCHIC(Color(0xFFE5709B)),
+    ROCK(Color(0xFFB2A061)),
+    GHOST(Color(0xFF846AB6)),
+    DRAGON(Color(0xFF6A7BAF)),
+    DARK(Color(0xFF736C75)),
+    STEEL(Color(0xFF89A1B0)),
+    FAIRY(Color(0xFFE397D1))
 }
 
     fun getPokemonTypeColor(pokemonType: String): Color {

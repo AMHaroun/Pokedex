@@ -32,6 +32,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.pokdex.R
 import com.example.pokdex.model.Pokemon
+import com.example.pokdex.model.getPokemonTypeColor
 import com.example.pokdex.network.responses.Stat
 import com.example.pokdex.network.responses.StatX
 import com.example.pokdex.network.responses.Type
@@ -232,8 +233,7 @@ fun PokemonDetailsCard(modifier: Modifier = Modifier, uiState: PokemonDetailScre
                     modifier = Modifier
                         .padding(8.dp)
                         .clip(CircleShape)
-                        //TODO: Provide pokemonTypes specific color here
-                        .background(Color.LightGray)
+                        .background(getPokemonTypeColor(pokemonType.type.name))
                 ) {
                     Text(
                         text = pokemonType.type.name.uppercase(),
