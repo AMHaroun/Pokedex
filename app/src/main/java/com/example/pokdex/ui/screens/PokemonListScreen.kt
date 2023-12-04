@@ -1,7 +1,6 @@
 package com.example.pokdex.ui.screens
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,11 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,10 +28,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import coil.compose.AsyncImage
 import com.example.pokdex.R
 import com.example.pokdex.model.PokemonListEntry
 import com.example.pokdex.ui.HeartSaveButton
+import com.example.pokdex.ui.PokemonImage
 import com.example.pokdex.ui.SearchBar
 
 
@@ -237,50 +232,6 @@ fun PokemonInformationCardPreview(){
         isPokemonSaved = true,
     )
 }
-
-
-
-
-@Composable
-fun PokemonImage(
-    modifier: Modifier = Modifier,
-    pokemonImageUrl: String,
-){
-
-    if(LocalInspectionMode.current){
-        Image(
-            painter = painterResource(id = R.drawable.ditto_front_default_sample),
-            contentDescription = null
-        )
-    } else {
-        AsyncImage(
-            model = pokemonImageUrl,
-            contentDescription = null,
-            contentScale = ContentScale.Fit,
-            placeholder = painterResource(id = R.drawable.loading_img),
-            error = painterResource(id = R.drawable.ic_broken_image),
-            modifier = modifier
-                .clip(MaterialTheme.shapes.medium)
-        )
-    }
-    
-}
-
-@Preview(
-    name = "PokemonImage Preview",
-)
-@Composable
-fun PokemonImagePreview(){
-
-    // Even though we are in a preview and we will not being using the Url to make load the image
-    // we pass it in here to avoid making it nullable
-
-    PokemonImage(
-        pokemonImageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/132.png",
-    )
-
-}
-
 
 
 

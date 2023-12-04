@@ -1,5 +1,6 @@
 package com.example.pokdex.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
@@ -25,11 +26,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import com.example.pokdex.R
 
 @Composable
 fun HeartSaveButton(
@@ -175,6 +182,48 @@ fun BackButton(navigateBack: ()->Unit, modifier: Modifier = Modifier){
 fun BackButtonPreview(){
 
     BackButton(navigateBack = {}, Modifier)
+
+}
+
+
+
+@Composable
+fun PokemonImage(
+    modifier: Modifier = Modifier,
+    pokemonImageUrl: String,
+){
+
+    if(LocalInspectionMode.current){
+        Image(
+            painter = painterResource(id = R.drawable.ditto_front_default_sample),
+            contentDescription = null
+        )
+    } else {
+        AsyncImage(
+            model = pokemonImageUrl,
+            contentDescription = null,
+            contentScale = ContentScale.Fit,
+            placeholder = painterResource(id = R.drawable.loading_img),
+            error = painterResource(id = R.drawable.ic_broken_image),
+            modifier = modifier
+                .clip(MaterialTheme.shapes.medium)
+        )
+    }
+
+}
+
+@Preview(
+    name = "PokemonImage Preview",
+)
+@Composable
+fun PokemonImagePreview(){
+
+    // Even though we are in a preview and we will not being using the Url to make load the image
+    // we pass it in here to avoid making it nullable
+
+    PokemonImage(
+        pokemonImageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/132.png",
+    )
 
 }
 
