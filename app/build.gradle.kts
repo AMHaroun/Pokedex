@@ -70,6 +70,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     // Coil
     implementation("io.coil-kt:coil-compose:2.4.0")
+    //Palette
+    implementation("androidx.palette:palette:1.0.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
