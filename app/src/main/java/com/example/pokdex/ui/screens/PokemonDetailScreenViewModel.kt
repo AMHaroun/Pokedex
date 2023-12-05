@@ -1,13 +1,18 @@
 package com.example.pokdex.ui.screens
 
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.palette.graphics.Palette
 import com.example.pokdex.PokedexApplication
 import com.example.pokdex.Resource
 import com.example.pokdex.data.PokemonRepository
@@ -25,13 +30,25 @@ class PokemonDetailScreenViewModel(val repository: PokemonRepository): ViewModel
     var uiState: PokemonDetailScreenUiState by mutableStateOf(PokemonDetailScreenUiState.Loading)
         private set
 
+    fun getDominantColor(drawable: Drawable, onDominantColorFound: (Color)->Unit){
+        val bitmap = (drawable as BitmapDrawable).bitmap.copy(Bitmap.Config.ARGB_8888, true)
+
+        viewModelScope.launch {
+            Palette.from(bitmap).generate { palette ->
+                palette?.dominantSwatch?.rgb?.let { colorValue ->
+                    onDominantColorFound(Color(colorValue))
+                }
+            }
+        }
+
+    }
+
     fun getPokemonData(pokemonName: String){
 
         viewModelScope.launch {
 
-            val result = repository.getPokemon(pokemonName)
 
-            when(result){
+            when(val result = repository.getPokemon(pokemonName)){
 
                 is Resource.Success ->{
 

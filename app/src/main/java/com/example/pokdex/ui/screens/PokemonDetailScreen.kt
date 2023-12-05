@@ -1,5 +1,6 @@
 package com.example.pokdex.ui.screens
 
+import android.graphics.drawable.Drawable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,6 +21,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.pokdex.R
 import com.example.pokdex.model.Pokemon
 import com.example.pokdex.model.getPokemonTypeColor
@@ -59,7 +65,12 @@ fun PokemonDetailScreen(
             PokemonDetails(
                 uiState = uiState,
                 modifier = modifier,
-                navigateBack = { navController.popBackStack() }
+                navigateBack = { navController.popBackStack() },
+                getDominantColor = { drawable, onDominantColorFound ->
+                    viewModel.getDominantColor(drawable){color ->
+                        onDominantColorFound(color)
+                    }
+                }
             )
         }
 
@@ -99,11 +110,17 @@ fun PokemonDetailScreen(
 fun PokemonDetails(
     uiState: PokemonDetailScreenUiState.Success,
     navigateBack: ()->Unit,
+    getDominantColor: (Drawable, (Color)->Unit)->Unit,
     modifier: Modifier = Modifier
 ){
+    val defaultDominantColor = Color.LightGray
+    var dominantColor by remember{ mutableStateOf(defaultDominantColor) }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
+        modifier = modifier.background(
+            dominantColor
+        )
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             BackButton(navigateBack = { navigateBack() })
@@ -120,7 +137,17 @@ fun PokemonDetails(
                 modifier = Modifier.padding(start = 16.dp)
             )
         }
-        PokemonImage(pokemonImageUrl = uiState.pokemon.imageUrl)
+
+        AsyncImage(
+            model = uiState.pokemon.imageUrl,
+            contentDescription = uiState.pokemon.name,
+            onSuccess = {success ->
+                getDominantColor(success.result.drawable){color ->
+                    dominantColor = color
+                }
+            }
+        )
+
         PokemonDetailsCard(uiState = uiState, modifier = Modifier.padding(20.dp))
     }
 
@@ -136,6 +163,7 @@ fun PokemonDetailsPreview(){
 
     PokemonDetails(
         navigateBack = {},
+        getDominantColor = {drawable, onDominantColorFound ->  },
         uiState = PokemonDetailScreenUiState.Success(
             pokemon = Pokemon(
                 height = 3,
