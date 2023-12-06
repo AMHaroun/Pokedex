@@ -31,6 +31,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.pokdex.R
 import com.example.pokdex.model.PokemonListEntry
 import com.example.pokdex.ui.HeartSaveButton
+import com.example.pokdex.ui.LoadingSpinner
 import com.example.pokdex.ui.PokemonImage
 import com.example.pokdex.ui.SearchBar
 
@@ -40,7 +41,6 @@ fun PokemonListScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
     viewModel: PokemonListScreenViewModel = viewModel(factory = PokemonListScreenViewModel.Factory),
-    previewUiState: PokemonListScreenUiState? = null
 ){
 
     val uiState = remember{ viewModel.uiState }
@@ -78,40 +78,6 @@ fun PokemonListScreen(
 }
 
 
-@SuppressLint("UnrememberedMutableState")
-@Preview(
-    name = "PokemonListScreen Preview",
-    showBackground = true,
-    showSystemUi = true
-)
-@Composable
-fun PokemonListScreenPreview(){
-
-    PokemonListScreen(
-        navController = rememberNavController(),
-        previewUiState = PokemonListScreenUiState(
-            pokemonList = mutableStateOf(
-                listOf(
-                    PokemonListEntry(
-                        pokemonName = "Ditto",
-                        pokemonImageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/132.png",
-                        pokedexIndexNumber = 123
-                    ),
-                    PokemonListEntry(
-                        pokemonName = "Ditto",
-                        pokemonImageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/132.png",
-                        pokedexIndexNumber = 321
-                    )
-
-                )
-            )
-        )
-    )
-
-}
-
-
-
 
 @Composable
 fun PokemonList(
@@ -128,20 +94,26 @@ fun PokemonList(
             }
 
             val pokemonEntry = uiState.pokemonList.value[it]
-            PokemonInformationCard(
-                modifier = Modifier
-                    .padding(top = 8.dp, bottom = 8.dp)
-                    .clickable {
-                        navController.navigate(
-                            "PokemonDetailScreen/${pokemonEntry.pokemonName.lowercase()}"
-                        )
-                    },
-                pokemonImageUrl = pokemonEntry.pokemonImageUrl,
-                pokemonName = pokemonEntry.pokemonName,
-                pokemonIndex = pokemonEntry.pokedexIndexNumber,
-                onPokemonSaved = { /*TODO*/ },
-                isPokemonSaved = true,
-            )
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+                PokemonInformationCard(
+                    modifier = Modifier
+                        .padding(top = 8.dp, bottom = 8.dp)
+                        .clickable {
+                            navController.navigate(
+                                "PokemonDetailScreen/${pokemonEntry.pokemonName.lowercase()}"
+                            )
+                        },
+                    pokemonImageUrl = pokemonEntry.pokemonImageUrl,
+                    pokemonName = pokemonEntry.pokemonName,
+                    pokemonIndex = pokemonEntry.pokedexIndexNumber,
+                    onPokemonSaved = { /*TODO*/ },
+                    isPokemonSaved = true,
+                )
+                if (uiState.isLoading) {
+                    LoadingSpinner()
+                }
+            }
         }
 
     }
