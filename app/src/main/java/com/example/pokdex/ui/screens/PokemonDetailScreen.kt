@@ -1,6 +1,7 @@
 package com.example.pokdex.ui.screens
 
 import android.graphics.drawable.Drawable
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,7 +29,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -119,8 +122,10 @@ fun PokemonDetails(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.background(
-            dominantColor
-        )
+            brush = Brush.verticalGradient(
+                colors = listOf( Color.White, dominantColor )
+                )
+            )
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             BackButton(navigateBack = { navigateBack() })
@@ -137,16 +142,22 @@ fun PokemonDetails(
                 modifier = Modifier.padding(start = 16.dp)
             )
         }
-
-        AsyncImage(
-            model = uiState.pokemon.imageUrl,
-            contentDescription = uiState.pokemon.name,
-            onSuccess = {success ->
-                getDominantColor(success.result.drawable){color ->
-                    dominantColor = color
+        if(LocalInspectionMode.current){
+            Image(
+                painter = painterResource(id = R.drawable.ditto_front_default_sample),
+                contentDescription = "Ditto"
+            )
+        }else {
+            AsyncImage(
+                model = uiState.pokemon.imageUrl,
+                contentDescription = uiState.pokemon.name,
+                onSuccess = { success ->
+                    getDominantColor(success.result.drawable) { color ->
+                        dominantColor = color
+                    }
                 }
-            }
-        )
+            )
+        }
 
         PokemonDetailsCard(uiState = uiState, modifier = Modifier.padding(20.dp))
     }
@@ -163,7 +174,7 @@ fun PokemonDetailsPreview(){
 
     PokemonDetails(
         navigateBack = {},
-        getDominantColor = {drawable, onDominantColorFound ->  },
+        getDominantColor = { _, _ ->  },
         uiState = PokemonDetailScreenUiState.Success(
             pokemon = Pokemon(
                 height = 3,
@@ -292,7 +303,7 @@ fun PokemonDetailsCard(modifier: Modifier = Modifier, uiState: PokemonDetailScre
 
                 PokemonStatBar(
                     statValue = pokemonStat.baseStat,
-                    statBarColor = Color.Green,
+                    statBarColor = Color(0xFF90EE90),
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .height(24.dp)
@@ -357,7 +368,7 @@ fun PokemonDetailsCardPreview(){
 @Composable
 fun PokemonStatBar(
     statValue: Int,
-    modifier: Modifier = Modifier.height(24.dp),
+    modifier: Modifier = Modifier,
     // The maximum value for pokemon stats that we get from the api are always 255
     statMaxValue: Int = 255,
     statBarColor: Color,
@@ -366,6 +377,7 @@ fun PokemonStatBar(
         modifier = modifier
             .fillMaxWidth()
             .clip(CircleShape)
+            .height(24.dp)
             .background(Color.LightGray)
     ) {
         Row(
