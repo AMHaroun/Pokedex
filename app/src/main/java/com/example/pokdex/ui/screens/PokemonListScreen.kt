@@ -32,6 +32,7 @@ import com.example.pokdex.R
 import com.example.pokdex.model.PokemonListEntry
 import com.example.pokdex.ui.HeartSaveButton
 import com.example.pokdex.ui.LoadingSpinner
+import com.example.pokdex.ui.NetworkErrorMessage
 import com.example.pokdex.ui.PokemonImage
 import com.example.pokdex.ui.SearchBar
 
@@ -58,21 +59,22 @@ fun PokemonListScreen(
                 .fillMaxWidth()
             )
 
-        if(uiState.loadingError){
-            Text(
-                text = uiState.loadingErrorString
-            )
+        if(uiState.isLoading){
+            LoadingSpinner()
+        } else if(uiState.loadingError){
+            NetworkErrorMessage(errorMessage = uiState.loadingErrorString) {
+                viewModel.loadPokemonPaginated()
+            }
         } else {
-
             PokemonList(
-                modifier = Modifier,
+                modifier = modifier ,
                 uiState = uiState,
                 navController = navController,
                 paginate = { viewModel.loadPokemonPaginated() }
             )
 
-
         }
+
     }
     
 }
