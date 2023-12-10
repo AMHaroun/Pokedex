@@ -111,13 +111,13 @@ fun PokemonList(
     paginate:()->Unit,
 ){
 
-    LazyColumn(modifier = modifier){
-        items(uiState.pokemonList.value.size){
-            if(it >= uiState.pokemonList.value.size - 1 && !uiState.endReached && !uiState.isSearching.value) {
+    LazyColumn(modifier = modifier) {
+        items(uiState.pokemonList.value.size) {index ->
+            if (index >= uiState.pokemonList.value.size - 1 && !uiState.endReached && !uiState.isSearching.value) {
                 paginate()
             }
 
-            val pokemonEntry = uiState.pokemonList.value[it]
+            val pokemonEntry = uiState.pokemonList.value[index]
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
                 PokemonInformationCard(
@@ -134,13 +134,19 @@ fun PokemonList(
                     onPokemonSaved = { /*TODO*/ },
                     isPokemonSaved = true,
                 )
-                if (uiState.loadingAdditionalEntries.value) {
-                    LoadingSpinner()
-                }
             }
         }
-
     }
+
+    if(!uiState.isSearching.value && !uiState.endReached && uiState.loadingAdditionalEntries.value){
+        Column(
+            modifier = modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            LoadingSpinner()
+        }
+    }
+
 
 }
 
