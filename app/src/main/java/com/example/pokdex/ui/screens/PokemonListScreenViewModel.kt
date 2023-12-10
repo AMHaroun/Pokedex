@@ -18,67 +18,67 @@ import com.example.pokdex.model.PokemonListEntry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-data class PokemonListScreenUiState(
-    var pokemonList: MutableState<List<PokemonListEntry>> = mutableStateOf(listOf()),
-    var loadingErrorString: String = "",
-    var loadingError: Boolean = false,
-    var isLoading: Boolean = false,
-    var endReached: Boolean = false
+sealed interface PokemonListScreenUiState{
+    data class Success(
+        var pokemonList: MutableState<List<PokemonListEntry>> = mutableStateOf(listOf()),
+        var loadingAdditionalEntries: MutableState<Boolean> = mutableStateOf(false),
+        var endReached: Boolean = false,
+        var isSearching: MutableState<Boolean> = mutableStateOf(false)
+    ) : PokemonListScreenUiState
+    data class Error(val errorMessage: String) : PokemonListScreenUiState
+    object Loading : PokemonListScreenUiState
+}
+
+data class PokemonListScreenViewModelState(
+    var currentPage: Int = 0,
+    var cachedPokemonList: List<PokemonListEntry> = listOf()
 )
 
 class PokemonListScreenViewModel(
     private val repository: PokemonRepository
 ): ViewModel() {
 
-    private var currentPage = 0
+    private val viewModelState = PokemonListScreenViewModelState()
 
-    private var cachedPokemonList: List<PokemonListEntry> = listOf()
-    private var isSearchStarting = true
-    var isSearching = mutableStateOf(false)
-
-    var uiState by mutableStateOf(PokemonListScreenUiState())
+    var uiState: PokemonListScreenUiState by mutableStateOf(PokemonListScreenUiState.Loading)
     private set
 
     init {
         loadPokemonPaginated()
     }
+
     fun searchPokemonList(searchQuery: String){
-        val listToSearch = if(isSearchStarting) {
-            uiState.pokemonList.value
-        } else {
-            cachedPokemonList
-        }
         viewModelScope.launch(Dispatchers.Default) {
-            if(searchQuery.isEmpty()) {
-                uiState.pokemonList.value = cachedPokemonList
-                isSearching.value = false
-                isSearchStarting = true
+            if(searchQuery.isEmpty()){
+                uiState = PokemonListScreenUiState.Success(
+                    pokemonList = mutableStateOf(viewModelState.cachedPokemonList)
+                )
+                (uiState as PokemonListScreenUiState.Success).isSearching.value = false
                 return@launch
             }
-            val results = listToSearch.filter {
-                it.pokemonName.contains(searchQuery.trim(), ignoreCase = true) ||
-                        it.pokedexIndexNumber.toString() == searchQuery.trim()
+            (uiState as PokemonListScreenUiState.Success).isSearching.value = true
+            val results = (uiState as PokemonListScreenUiState.Success).pokemonList.value.filter {
+                it.pokemonName.contains(searchQuery.trim(), ignoreCase = true)
             }
-            if(isSearchStarting) {
-                cachedPokemonList = uiState.pokemonList.value
-                isSearchStarting = false
-            }
-            uiState.pokemonList.value = results
-            isSearching.value = true
+            uiState = PokemonListScreenUiState.Success(pokemonList = mutableStateOf(results))
         }
     }
+
     fun loadPokemonPaginated(){
 
         viewModelScope.launch {
 
-            uiState.isLoading = true
-            val result = repository.getPokemonList(Constants.PAGE_SIZE, currentPage * Constants.PAGE_SIZE)
+            if(uiState is PokemonListScreenUiState.Success){
+                (uiState as PokemonListScreenUiState.Success).loadingAdditionalEntries.value = true
+            }
+
+            val result = repository.getPokemonList(Constants.PAGE_SIZE, viewModelState.currentPage * Constants.PAGE_SIZE)
 
             when(result){
 
                 is Resource.Success->{
-                    if(currentPage * Constants.PAGE_SIZE >= result.data.count) {
-                        uiState.endReached = true
+                    if(viewModelState.currentPage * Constants.PAGE_SIZE >= result.data.count) {
+                        (uiState as PokemonListScreenUiState.Success).endReached = true
                     }
                     val pokemonEntries = result.data.results.mapIndexed{index, entry->
                         val number = if(entry.url.endsWith("/")){
@@ -93,16 +93,13 @@ class PokemonListScreenViewModel(
                             pokedexIndexNumber = number.toInt()
                         )
                     }
-                    currentPage++
-                    uiState.loadingErrorString = ""
-                    uiState.loadingError = false
-                    uiState.isLoading = false
-                    uiState.pokemonList.value += pokemonEntries
+                    viewModelState.currentPage++
+                    viewModelState.cachedPokemonList += pokemonEntries
+                    uiState = PokemonListScreenUiState.Success(pokemonList = mutableStateOf(viewModelState.cachedPokemonList))
                 }
 
                 is Resource.Error->{
-                    uiState.loadingErrorString = result.message
-                    uiState.loadingError= true
+                    uiState = PokemonListScreenUiState.Error(errorMessage =  result.message)
                 }
             }
 

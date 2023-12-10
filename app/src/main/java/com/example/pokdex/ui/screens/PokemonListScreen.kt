@@ -16,7 +16,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -44,7 +43,7 @@ fun PokemonListScreen(
     viewModel: PokemonListScreenViewModel = viewModel(factory = PokemonListScreenViewModel.Factory),
 ){
 
-    val uiState = remember{ viewModel.uiState }
+    val uiState = viewModel.uiState
 
     Column(
         modifier = modifier.fillMaxSize()
@@ -59,24 +58,47 @@ fun PokemonListScreen(
                 .fillMaxWidth()
             )
 
-        if(uiState.isLoading){
-            LoadingSpinner()
-        } else if(uiState.loadingError){
-            NetworkErrorMessage(errorMessage = uiState.loadingErrorString) {
-                viewModel.loadPokemonPaginated()
+        when(uiState){
+
+            is PokemonListScreenUiState.Success ->{
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    PokemonList(
+                        modifier = modifier,
+                        uiState = uiState,
+                        navController = navController,
+                        paginate = { viewModel.loadPokemonPaginated() }
+                    )
+                }
             }
-        } else {
-            PokemonList(
-                modifier = modifier ,
-                uiState = uiState,
-                navController = navController,
-                paginate = { viewModel.loadPokemonPaginated() }
-            )
+
+            is PokemonListScreenUiState.Loading ->{
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    LoadingSpinner()
+                }
+            }
+
+            is PokemonListScreenUiState.Error ->{
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ){
+                    NetworkErrorMessage(errorMessage = uiState.errorMessage) {
+                        viewModel.loadPokemonPaginated()
+                    }
+                }
+            }
 
         }
-
     }
-    
 }
 
 
@@ -84,14 +106,14 @@ fun PokemonListScreen(
 @Composable
 fun PokemonList(
     modifier: Modifier,
-    uiState: PokemonListScreenUiState,
+    uiState: PokemonListScreenUiState.Success,
     navController: NavController,
     paginate:()->Unit,
 ){
 
     LazyColumn(modifier = modifier){
         items(uiState.pokemonList.value.size){
-            if(it >= uiState.pokemonList.value.size - 1 && !uiState.endReached) {
+            if(it >= uiState.pokemonList.value.size - 1 && !uiState.endReached && !uiState.isSearching.value) {
                 paginate()
             }
 
@@ -112,7 +134,7 @@ fun PokemonList(
                     onPokemonSaved = { /*TODO*/ },
                     isPokemonSaved = true,
                 )
-                if (uiState.isLoading) {
+                if (uiState.loadingAdditionalEntries.value) {
                     LoadingSpinner()
                 }
             }
@@ -132,7 +154,7 @@ fun PokemonListPreview(){
     PokemonList(
         modifier = Modifier,
         navController = rememberNavController(),
-        uiState = PokemonListScreenUiState(
+        uiState = PokemonListScreenUiState.Success(
             pokemonList = mutableStateOf(
                     listOf(
                     PokemonListEntry(
