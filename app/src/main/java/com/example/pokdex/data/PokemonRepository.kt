@@ -4,6 +4,8 @@ import com.example.pokdex.Resource
 import com.example.pokdex.network.responses.Pokemon
 import com.example.pokdex.network.responses.PokemonList
 import com.example.pokdex.network.responses.PokemonStat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 
 class PokemonRepository(
@@ -13,7 +15,9 @@ class PokemonRepository(
     suspend fun getPokemon(pokemonName: String): Resource<Pokemon> {
 
         val result  = try{
-            dataSource.getPokemon(pokemonName)
+            withContext(Dispatchers.IO) {
+                dataSource.getPokemon(pokemonName)
+            }
         } catch (e: Exception){
             return Resource.Error("Failed to fetch data", null)
         }
@@ -23,7 +27,9 @@ class PokemonRepository(
     suspend fun getPokemonList(limit: Int, offset: Int): Resource<PokemonList> {
 
         val result = try {
-            dataSource.getPokemonPaginatedResourcesList(limit, offset)
+            withContext(Dispatchers.IO){
+                dataSource.getPokemonPaginatedResourcesList(limit, offset)
+            }
         } catch (e: Exception){
             return Resource.Error("Failed to fetch data", null)
         }
@@ -34,7 +40,9 @@ class PokemonRepository(
     suspend fun getPokemonStat(id: Int): Resource<PokemonStat> {
 
         val result = try {
-            dataSource.getPokemonStatById(id)
+            withContext(Dispatchers.IO) {
+                dataSource.getPokemonStatById(id)
+            }
         } catch (e: Exception){
             return Resource.Error("Failed to fetch data", null)
         }
@@ -43,7 +51,9 @@ class PokemonRepository(
     suspend fun getPokemonStat(pokemonName: String): Resource<PokemonStat> {
 
         val result = try {
-            dataSource.getPokemonStatByString(pokemonName)
+            withContext(Dispatchers.IO) {
+                dataSource.getPokemonStatByString(pokemonName)
+            }
         } catch (e: Exception){
             return Resource.Error("Failed to fetch data", null)
         }
