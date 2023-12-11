@@ -311,7 +311,7 @@ fun PokemonDetailsCard(modifier: Modifier = Modifier, uiState: PokemonDetailScre
 
                 PokemonStatBar(
                     statValue = pokemonStat.baseStat,
-                    statBarColor = Color(0xFF90EE90),
+                    statBarColor = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .height(24.dp)
@@ -379,14 +379,14 @@ fun PokemonStatBar(
     modifier: Modifier = Modifier,
     // The maximum value for pokemon stats that we get from the api are always 255
     statMaxValue: Int = 255,
-    statBarColor: Color,
+    statBarColor: Color = MaterialTheme.colorScheme.onPrimary,
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
             .clip(CircleShape)
             .height(24.dp)
-            .background(Color.LightGray)
+            .background(MaterialTheme.colorScheme.inversePrimary)
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
