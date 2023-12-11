@@ -47,6 +47,12 @@ class PokemonListScreenViewModel(
         loadPokemonPaginated()
     }
 
+    fun savePokemonList(){
+        uiState = PokemonListScreenUiState.Success(
+            pokemonList = mutableStateOf(viewModelState.cachedPokemonList)
+        )
+    }
+
     fun searchPokemonList(searchQuery: String){
         viewModelScope.launch(Dispatchers.Default) {
             if(searchQuery.isEmpty()){

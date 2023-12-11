@@ -70,7 +70,8 @@ fun PokemonListScreen(
                         modifier = modifier.fillMaxSize(),
                         uiState = uiState,
                         navController = navController,
-                        paginate = { viewModel.loadPokemonPaginated() }
+                        paginate = { viewModel.loadPokemonPaginated() },
+                        beforeNavigation = { viewModel.savePokemonList() }
                     )
                 }
             }
@@ -108,6 +109,7 @@ fun PokemonList(
     modifier: Modifier,
     uiState: PokemonListScreenUiState.Success,
     navController: NavController,
+    beforeNavigation: ()->Unit,
     paginate:()->Unit,
 ){
 
@@ -130,6 +132,7 @@ fun PokemonList(
                         .fillMaxWidth()
                         .padding(top = 8.dp, bottom = 8.dp)
                         .clickable {
+                            beforeNavigation()
                             navController.navigate(
                                 "PokemonDetailScreen/${pokemonEntry.pokemonName.lowercase()}"
                             )
@@ -183,7 +186,8 @@ fun PokemonListPreview(){
                 )
             )
         ),
-        paginate = {}
+        paginate = {},
+        beforeNavigation = {}
     )
 
 }
