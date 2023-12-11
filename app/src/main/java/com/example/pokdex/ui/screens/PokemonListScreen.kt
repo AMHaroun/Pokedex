@@ -67,7 +67,7 @@ fun PokemonListScreen(
                     verticalArrangement = Arrangement.Center
                 ) {
                     PokemonList(
-                        modifier = modifier,
+                        modifier = modifier.fillMaxSize(),
                         uiState = uiState,
                         navController = navController,
                         paginate = { viewModel.loadPokemonPaginated() }
@@ -112,8 +112,13 @@ fun PokemonList(
 ){
 
     LazyColumn(modifier = modifier) {
-        items(uiState.pokemonList.value.size) {index ->
-            if (index >= uiState.pokemonList.value.size - 1 && !uiState.endReached && !uiState.isSearching.value) {
+        items(
+            uiState.pokemonList.value.size,
+        ) {index ->
+            if (
+                index >= uiState.pokemonList.value.size - 1
+                && !uiState.endReached && !uiState.isSearching.value
+            ){
                 paginate()
             }
 
@@ -122,6 +127,7 @@ fun PokemonList(
 
                 PokemonInformationCard(
                     modifier = Modifier
+                        .fillMaxWidth()
                         .padding(top = 8.dp, bottom = 8.dp)
                         .clickable {
                             navController.navigate(

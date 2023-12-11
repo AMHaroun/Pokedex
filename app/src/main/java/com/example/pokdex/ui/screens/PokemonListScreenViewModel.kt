@@ -60,7 +60,10 @@ class PokemonListScreenViewModel(
             val results = (uiState as PokemonListScreenUiState.Success).pokemonList.value.filter {
                 it.pokemonName.contains(searchQuery.trim(), ignoreCase = true)
             }
-            uiState = PokemonListScreenUiState.Success(pokemonList = mutableStateOf(results))
+            uiState = PokemonListScreenUiState.Success(
+                pokemonList = mutableStateOf(results),
+                isSearching = mutableStateOf(true)
+            )
         }
     }
 
@@ -72,7 +75,10 @@ class PokemonListScreenViewModel(
                 (uiState as PokemonListScreenUiState.Success).loadingAdditionalEntries.value = true
             }
 
-            val result = repository.getPokemonList(Constants.PAGE_SIZE, viewModelState.currentPage * Constants.PAGE_SIZE)
+            val result = repository.getPokemonList(
+                Constants.PAGE_SIZE,
+                viewModelState.currentPage * Constants.PAGE_SIZE
+            )
 
             when(result){
 
@@ -95,7 +101,9 @@ class PokemonListScreenViewModel(
                     }
                     viewModelState.currentPage++
                     viewModelState.cachedPokemonList += pokemonEntries
-                    uiState = PokemonListScreenUiState.Success(pokemonList = mutableStateOf(viewModelState.cachedPokemonList))
+                    uiState = PokemonListScreenUiState.Success(
+                        pokemonList = mutableStateOf(viewModelState.cachedPokemonList)
+                    )
                 }
 
                 is Resource.Error->{
