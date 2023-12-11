@@ -3,6 +3,7 @@ package com.example.pokdex.ui.screens
 import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -55,6 +56,7 @@ fun PokemonDetailScreen(
     pokemonName: String,
     navController: NavController,
     modifier: Modifier = Modifier,
+    useDarkTheme: Boolean = isSystemInDarkTheme(),
     viewModel: PokemonDetailScreenViewModel = viewModel(factory = PokemonDetailScreenViewModel.Factory)
 ){
 
@@ -70,8 +72,14 @@ fun PokemonDetailScreen(
                 modifier = modifier,
                 navigateBack = { navController.popBackStack() },
                 getDominantColor = { drawable, onDominantColorFound ->
-                    viewModel.getDominantColor(drawable){color ->
-                        onDominantColorFound(color)
+                    if(!useDarkTheme) {
+                        viewModel.getDominantColor(drawable) { color ->
+                            onDominantColorFound(color)
+                        }
+                    } else {
+                        viewModel.getDominantDarkColor(drawable) { color ->
+                            onDominantColorFound(color)
+                        }
                     }
                 }
             )
@@ -123,7 +131,7 @@ fun PokemonDetails(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.background(
             brush = Brush.verticalGradient(
-                colors = listOf( Color.White, dominantColor )
+                colors = listOf( MaterialTheme.colorScheme.background, dominantColor )
                 )
             )
     ) {
