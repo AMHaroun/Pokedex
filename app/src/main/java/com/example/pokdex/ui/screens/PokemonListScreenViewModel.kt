@@ -54,6 +54,10 @@ class PokemonListScreenViewModel(
     }
 
     fun searchPokemonList(searchQuery: String){
+
+        /* We modify the uiState PokemonList based on the search query & then restore it from
+           the cached PokemonList when we are done */
+
         viewModelScope.launch(Dispatchers.Default) {
             if(searchQuery.isEmpty()){
                 uiState = PokemonListScreenUiState.Success(
@@ -92,6 +96,9 @@ class PokemonListScreenViewModel(
                     if(viewModelState.currentPage * Constants.PAGE_SIZE >= result.data.count) {
                         (uiState as PokemonListScreenUiState.Success).endReached = true
                     }
+                    /* Network response does not provide us with image urls but we can get the image
+                       url by using the pokemonIndexNumber along with the githubusercontent link */
+
                     val pokemonEntries = result.data.results.mapIndexed{index, entry->
                         val number = if(entry.url.endsWith("/")){
                             entry.url.dropLast(1).takeLastWhile { it.isDigit() }
