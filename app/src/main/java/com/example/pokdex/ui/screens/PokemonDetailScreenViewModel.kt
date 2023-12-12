@@ -31,11 +31,25 @@ class PokemonDetailScreenViewModel(val repository: PokemonRepository): ViewModel
         private set
 
     fun getDominantColor(drawable: Drawable, onDominantColorFound: (Color)->Unit){
+        // getting the dominant color with the palette library requires a bitmap
         val bitmap = (drawable as BitmapDrawable).bitmap.copy(Bitmap.Config.ARGB_8888, true)
 
         viewModelScope.launch {
             Palette.from(bitmap).generate { palette ->
                 palette?.dominantSwatch?.rgb?.let { colorValue ->
+                    onDominantColorFound(Color(colorValue))
+                }
+            }
+        }
+
+    }
+
+    fun getDominantDarkColor(drawable: Drawable, onDominantColorFound: (Color)->Unit){
+        val bitmap = (drawable as BitmapDrawable).bitmap.copy(Bitmap.Config.ARGB_8888, true)
+
+        viewModelScope.launch {
+            Palette.from(bitmap).generate { palette ->
+                palette?.darkMutedSwatch?.rgb?.let { colorValue ->
                     onDominantColorFound(Color(colorValue))
                 }
             }

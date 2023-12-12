@@ -47,7 +47,17 @@ class PokemonListScreenViewModel(
         loadPokemonPaginated()
     }
 
+    fun savePokemonList(){
+        uiState = PokemonListScreenUiState.Success(
+            pokemonList = mutableStateOf(viewModelState.cachedPokemonList)
+        )
+    }
+
     fun searchPokemonList(searchQuery: String){
+
+        /* We modify the uiState PokemonList based on the search query & then restore it from
+           the cached PokemonList when we are done */
+
         viewModelScope.launch(Dispatchers.Default) {
             if(searchQuery.isEmpty()){
                 uiState = PokemonListScreenUiState.Success(
@@ -60,7 +70,10 @@ class PokemonListScreenViewModel(
             val results = (uiState as PokemonListScreenUiState.Success).pokemonList.value.filter {
                 it.pokemonName.contains(searchQuery.trim(), ignoreCase = true)
             }
-            uiState = PokemonListScreenUiState.Success(pokemonList = mutableStateOf(results))
+            uiState = PokemonListScreenUiState.Success(
+                pokemonList = mutableStateOf(results),
+                isSearching = mutableStateOf(true)
+            )
         }
     }
 
@@ -72,7 +85,10 @@ class PokemonListScreenViewModel(
                 (uiState as PokemonListScreenUiState.Success).loadingAdditionalEntries.value = true
             }
 
-            val result = repository.getPokemonList(Constants.PAGE_SIZE, viewModelState.currentPage * Constants.PAGE_SIZE)
+            val result = repository.getPokemonList(
+                Constants.PAGE_SIZE,
+                viewModelState.currentPage * Constants.PAGE_SIZE
+            )
 
             when(result){
 
@@ -80,6 +96,9 @@ class PokemonListScreenViewModel(
                     if(viewModelState.currentPage * Constants.PAGE_SIZE >= result.data.count) {
                         (uiState as PokemonListScreenUiState.Success).endReached = true
                     }
+                    /* Network response does not provide us with image urls but we can get the image
+                       url by using the pokemonIndexNumber along with the githubusercontent link */
+
                     val pokemonEntries = result.data.results.mapIndexed{index, entry->
                         val number = if(entry.url.endsWith("/")){
                             entry.url.dropLast(1).takeLastWhile { it.isDigit() }
@@ -95,7 +114,9 @@ class PokemonListScreenViewModel(
                     }
                     viewModelState.currentPage++
                     viewModelState.cachedPokemonList += pokemonEntries
-                    uiState = PokemonListScreenUiState.Success(pokemonList = mutableStateOf(viewModelState.cachedPokemonList))
+                    uiState = PokemonListScreenUiState.Success(
+                        pokemonList = mutableStateOf(viewModelState.cachedPokemonList)
+                    )
                 }
 
                 is Resource.Error->{

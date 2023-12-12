@@ -67,10 +67,11 @@ fun PokemonListScreen(
                     verticalArrangement = Arrangement.Center
                 ) {
                     PokemonList(
-                        modifier = modifier,
+                        modifier = modifier.fillMaxSize(),
                         uiState = uiState,
                         navController = navController,
-                        paginate = { viewModel.loadPokemonPaginated() }
+                        paginate = { viewModel.loadPokemonPaginated() },
+                        beforeNavigation = { viewModel.savePokemonList() }
                     )
                 }
             }
@@ -108,22 +109,30 @@ fun PokemonList(
     modifier: Modifier,
     uiState: PokemonListScreenUiState.Success,
     navController: NavController,
+    beforeNavigation: ()->Unit,
     paginate:()->Unit,
 ){
 
-    LazyColumn(modifier = modifier){
-        items(uiState.pokemonList.value.size){
-            if(it >= uiState.pokemonList.value.size - 1 && !uiState.endReached && !uiState.isSearching.value) {
+    LazyColumn(modifier = modifier) {
+        items(
+            uiState.pokemonList.value.size,
+        ) {index ->
+            if (
+                index >= uiState.pokemonList.value.size - 1
+                && !uiState.endReached && !uiState.isSearching.value
+            ){
                 paginate()
             }
 
-            val pokemonEntry = uiState.pokemonList.value[it]
+            val pokemonEntry = uiState.pokemonList.value[index]
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
                 PokemonInformationCard(
                     modifier = Modifier
+                        .fillMaxWidth()
                         .padding(top = 8.dp, bottom = 8.dp)
                         .clickable {
+                            beforeNavigation()
                             navController.navigate(
                                 "PokemonDetailScreen/${pokemonEntry.pokemonName.lowercase()}"
                             )
@@ -134,13 +143,19 @@ fun PokemonList(
                     onPokemonSaved = { /*TODO*/ },
                     isPokemonSaved = true,
                 )
-                if (uiState.loadingAdditionalEntries.value) {
-                    LoadingSpinner()
-                }
             }
         }
-
     }
+
+    if(!uiState.isSearching.value && !uiState.endReached && uiState.loadingAdditionalEntries.value){
+        Column(
+            modifier = modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            LoadingSpinner()
+        }
+    }
+
 
 }
 
@@ -171,7 +186,8 @@ fun PokemonListPreview(){
                 )
             )
         ),
-        paginate = {}
+        paginate = {},
+        beforeNavigation = {}
     )
 
 }

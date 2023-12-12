@@ -3,6 +3,7 @@ package com.example.pokdex.ui.screens
 import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -55,6 +56,7 @@ fun PokemonDetailScreen(
     pokemonName: String,
     navController: NavController,
     modifier: Modifier = Modifier,
+    useDarkTheme: Boolean = isSystemInDarkTheme(),
     viewModel: PokemonDetailScreenViewModel = viewModel(factory = PokemonDetailScreenViewModel.Factory)
 ){
 
@@ -70,8 +72,14 @@ fun PokemonDetailScreen(
                 modifier = modifier,
                 navigateBack = { navController.popBackStack() },
                 getDominantColor = { drawable, onDominantColorFound ->
-                    viewModel.getDominantColor(drawable){color ->
-                        onDominantColorFound(color)
+                    if(!useDarkTheme) {
+                        viewModel.getDominantColor(drawable) { color ->
+                            onDominantColorFound(color)
+                        }
+                    } else {
+                        viewModel.getDominantDarkColor(drawable) { color ->
+                            onDominantColorFound(color)
+                        }
                     }
                 }
             )
@@ -123,7 +131,7 @@ fun PokemonDetails(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.background(
             brush = Brush.verticalGradient(
-                colors = listOf( Color.White, dominantColor )
+                colors = listOf( MaterialTheme.colorScheme.background, dominantColor )
                 )
             )
     ) {
@@ -278,6 +286,7 @@ fun PokemonDetailsCard(modifier: Modifier = Modifier, uiState: PokemonDetailScre
                         text = pokemonType.type.name.uppercase(),
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.Bold,
+                        color = Color.Black,
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     )
 
@@ -303,7 +312,7 @@ fun PokemonDetailsCard(modifier: Modifier = Modifier, uiState: PokemonDetailScre
 
                 PokemonStatBar(
                     statValue = pokemonStat.baseStat,
-                    statBarColor = Color(0xFF90EE90),
+                    statBarColor = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .height(24.dp)
@@ -371,14 +380,14 @@ fun PokemonStatBar(
     modifier: Modifier = Modifier,
     // The maximum value for pokemon stats that we get from the api are always 255
     statMaxValue: Int = 255,
-    statBarColor: Color,
+    statBarColor: Color = MaterialTheme.colorScheme.onPrimary,
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
             .clip(CircleShape)
             .height(24.dp)
-            .background(Color.LightGray)
+            .background(MaterialTheme.colorScheme.inversePrimary)
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
