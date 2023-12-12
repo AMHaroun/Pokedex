@@ -1,18 +1,15 @@
 
 
 <p align="center">
-
-![Pokemon](https://user-images.githubusercontent.com/29473781/180619084-a56960ab-7efa-4e34-9d33-4e3e581d62ff.png)
-
+<img src=https://user-images.githubusercontent.com/29473781/180619084-a56960ab-7efa-4e34-9d33-4e3e581d62ff.png>
 </p>
 
+<p align="center">Pokédex</p>
+
+<p align="center">Built on Android</p>
+
 <p align="center">
-
-# Pokédex
-
-#### Built on Android
 <img src="https://cdn.worldvectorlogo.com/logos/android-logomark.svg" alt="Icon" width="30" height="20">
-
 </p>
 
 ## About Pokédex
@@ -63,4 +60,3 @@ Want to contribute to Pokedex?
 
 
 Simply fork the repository, create a branch , and submit a pull request with your changes.
-
