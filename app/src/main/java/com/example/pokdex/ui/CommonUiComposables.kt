@@ -134,9 +134,9 @@ fun NetworkErrorMessage(
     showBackground = true
 )
 @Composable
-fun NetworkErrorMessagePreview(){
+fun NetworkErrorMessagePreview(modifier: Modifier = Modifier){
 
-    NetworkErrorMessage(errorMessage = null) {}
+    NetworkErrorMessage(errorMessage = null, modifier = modifier) {}
 
 }
 
