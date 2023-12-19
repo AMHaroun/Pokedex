@@ -5,18 +5,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.pokdex.Constants
-import com.example.pokdex.PokedexApplication
 import com.example.pokdex.Resource
 import com.example.pokdex.data.PokemonRepository
 import com.example.pokdex.model.PokemonListEntry
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 sealed interface PokemonListScreenUiState{
     data class Success(
@@ -34,7 +31,8 @@ data class PokemonListScreenViewModelState(
     var cachedPokemonList: List<PokemonListEntry> = listOf()
 )
 
-class PokemonListScreenViewModel(
+@HiltViewModel
+class PokemonListScreenViewModel @Inject constructor(
     private val repository: PokemonRepository
 ): ViewModel() {
 
@@ -126,16 +124,5 @@ class PokemonListScreenViewModel(
 
         }
     }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val application = (this[APPLICATION_KEY] as PokedexApplication)
-                val pokedexRepository = application.container.pokemonRepository
-                PokemonListScreenViewModel(repository = pokedexRepository)
-            }
-        }
-    }
-
 
 }

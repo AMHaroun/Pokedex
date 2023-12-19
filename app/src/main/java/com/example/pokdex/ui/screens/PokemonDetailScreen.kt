@@ -37,7 +37,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.pokdex.R
@@ -57,7 +57,7 @@ fun PokemonDetailScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
     useDarkTheme: Boolean = isSystemInDarkTheme(),
-    viewModel: PokemonDetailScreenViewModel = viewModel(factory = PokemonDetailScreenViewModel.Factory)
+    viewModel: PokemonDetailScreenViewModel = hiltViewModel()
 ){
 
     val uiState = viewModel.uiState
