@@ -64,6 +64,12 @@ class FakePokemonApiService : PokemonApiService {
 
     // All methods model responses given from https://pokeapi.co/api/v2 on 12/22/23
     override suspend fun getPokemon(pokemonName: String): Pokemon {
+
+        if(pokemonName == "ThrowException")
+        {
+            throw Exception(message = "Network Error")
+        }
+
         // Models network response from https://pokeapi.co/api/v2/pokemon/ditto on 12/22/2023
         return Pokemon(
             height = 3,
@@ -598,6 +604,11 @@ class FakePokemonApiService : PokemonApiService {
     }
 
     override suspend fun getPokemonPaginatedResourcesList(limit: Int, offset: Int): PokemonList {
+
+        if(limit == 0 && offset == 0){
+            throw Exception("Network Error")
+        }
+
         // Models network response from https://pokeapi.co/api/v2/pokemon/ on 12/22/2023
         return PokemonList(
             count = 1302,
@@ -629,6 +640,11 @@ class FakePokemonApiService : PokemonApiService {
     }
 
     override suspend fun getPokemonStatById(id: Int): PokemonStat {
+
+        if(id == 0){
+            throw Exception(message = "Network Error")
+        }
+
         // Models network response from https://pokeapi.co/api/v2/stat/1/ on 12/22/2023
         return PokemonStat(
             game_index = 1,
@@ -666,6 +682,11 @@ class FakePokemonApiService : PokemonApiService {
     }
 
     override suspend fun getPokemonStatByName(pokemonName: String): PokemonStat {
+
+        if(pokemonName == "ThrowException"){
+            throw Exception("Network Error")
+        }
+
         // Same network response as the one above
         return PokemonStat(
             game_index = 1,
