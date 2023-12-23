@@ -37,4 +37,70 @@ class PokemonRepositoryImplTest{
 
         assertThat(result is Resource.Error)
     }
+
+    @Test
+    fun getPokemonList_validRequest_returnsSuccess(): Unit = runBlocking{
+        val limit = 20
+        val offset = 0
+
+        val result = pokemonRepository.getPokemonList(limit, offset)
+
+        assertThat(result is Resource.Success)
+    }
+
+    @Test
+    fun getPokemonList_networkError_returnsError(): Unit = runBlocking{
+
+        // passing a limit & offset of zero will cause fakePokemonApiService to simulate
+        // a network error
+        val limit = 0
+        val offset = 0
+
+        val result = pokemonRepository.getPokemonList(limit, offset)
+
+        assertThat(result is Resource.Error)
+    }
+
+    @Test
+    fun getPokemonStatId_validRequest_returnsSuccess(): Unit = runBlocking{
+        val id = 132
+
+        val result = pokemonRepository.getPokemonStat(id)
+
+        assertThat(result is Resource.Success)
+    }
+
+    @Test
+    fun getPokemonStatId_networkError_returnsError(): Unit = runBlocking{
+
+        // passing a id of zero will cause fakePokemonApiService to simulate
+        // a network error
+        val id = 0
+
+        val result = pokemonRepository.getPokemonStat(id)
+
+        assertThat(result is Resource.Error)
+    }
+
+    @Test
+    fun getPokemonStatName_validRequest_returnsSuccess(): Unit = runBlocking{
+        val pokemonName = "ditto"
+
+        val result = pokemonRepository.getPokemonStat(pokemonName)
+
+        assertThat(result is Resource.Success)
+    }
+
+    @Test
+    fun getPokemonStatName_networkError_returnsError(): Unit = runBlocking{
+
+        // Passing the string "ThrowException" will cause fakePokemonApiService to simulate
+        // a network error
+        val pokemonName = "ThrowException"
+
+        val result = pokemonRepository.getPokemonStat(pokemonName)
+
+        assertThat(result is Resource.Error)
+    }
+
 }
