@@ -5,13 +5,16 @@ import com.example.pokdex.data.PokemonRepositoryImpl
 import com.example.pokdex.network.PokemonApiService
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import dagger.hilt.testing.TestInstallIn
 import javax.inject.Singleton
 
 
 @Module
-@InstallIn(SingletonComponent::class)
+@TestInstallIn(
+    components = [SingletonComponent::class],
+    replaces = [AppModule::class]
+)
 object TestAppModule{
     @Provides
     @Singleton
