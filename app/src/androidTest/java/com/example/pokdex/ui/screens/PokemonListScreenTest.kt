@@ -1,5 +1,6 @@
 package com.example.pokdex.ui.screens
 
+import androidx.activity.compose.setContent
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.navigation.compose.NavHost
@@ -24,7 +25,7 @@ class PokemonListScreenTest{
     @Before
     fun setUp(){
         hiltRule.inject()
-        composeRule.setContent {
+        composeRule.activity.setContent {
             val navController = rememberNavController()
             NavHost(navController = navController, startDestination = "PokemonListScreen"){
                 composable("PokemonListScreen"){
