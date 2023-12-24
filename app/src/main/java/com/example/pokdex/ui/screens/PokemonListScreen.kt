@@ -35,6 +35,7 @@ import com.example.pokdex.ui.LoadingSpinner
 import com.example.pokdex.ui.NetworkErrorMessage
 import com.example.pokdex.ui.PokemonImage
 import com.example.pokdex.ui.SearchBar
+import com.example.pokdex.util.TestTags
 
 
 @Composable
@@ -57,7 +58,7 @@ fun PokemonListScreen(
             modifier = Modifier
                 .padding(top = dimensionResource(id = R.dimen.small_padding))
                 .fillMaxWidth()
-                .testTag("SEARCH_BAR")
+                .testTag(TestTags.SEARCH_BAR)
             )
 
         when(uiState){

@@ -1,4 +1,4 @@
-package com.example.pokdex
+package com.example.pokdex.util
 
 sealed class Resource<out T> {
     data class Success<out T>(val data: T) : Resource<T>()

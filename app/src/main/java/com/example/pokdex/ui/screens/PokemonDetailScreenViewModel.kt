@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.palette.graphics.Palette
-import com.example.pokdex.Resource
+import com.example.pokdex.util.Resource
 import com.example.pokdex.data.PokemonRepository
 import com.example.pokdex.model.Pokemon
 import dagger.hilt.android.lifecycle.HiltViewModel

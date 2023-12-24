@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pokdex.Constants
-import com.example.pokdex.Resource
+import com.example.pokdex.util.Constants
+import com.example.pokdex.util.Resource
 import com.example.pokdex.data.PokemonRepository
 import com.example.pokdex.model.PokemonListEntry
 import dagger.hilt.android.lifecycle.HiltViewModel

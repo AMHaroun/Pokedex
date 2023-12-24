@@ -1,6 +1,6 @@
 package com.example.pokdex.data
 
-import com.example.pokdex.Resource
+import com.example.pokdex.util.Resource
 import com.example.pokdex.network.responses.Pokemon
 import com.example.pokdex.network.responses.PokemonList
 import com.example.pokdex.network.responses.PokemonStat

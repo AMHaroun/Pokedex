@@ -1,6 +1,6 @@
 package com.example.pokdex.di
 
-import com.example.pokdex.Constants
+import com.example.pokdex.util.Constants
 import com.example.pokdex.data.PokemonRepository
 import com.example.pokdex.data.PokemonRepositoryImpl
 import com.example.pokdex.network.PokemonApiService

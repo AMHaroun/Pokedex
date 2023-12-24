@@ -1,6 +1,6 @@
 package com.example.pokdex.data
 
-import com.example.pokdex.Resource
+import com.example.pokdex.util.Resource
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
