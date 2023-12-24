@@ -24,7 +24,10 @@ object AppModule{
         val baseUrl = Constants.BASE_URL
 
         return Retrofit.Builder()
-            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+            .addConverterFactory(
+                Json{ignoreUnknownKeys = true}
+                .asConverterFactory("application/json".toMediaType())
+            )
             .baseUrl(baseUrl)
             .build()
             .create(PokemonApiService::class.java)
