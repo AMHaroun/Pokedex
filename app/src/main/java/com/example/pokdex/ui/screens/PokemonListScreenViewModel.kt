@@ -1,5 +1,6 @@
 package com.example.pokdex.ui.screens
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,7 +37,8 @@ class PokemonListScreenViewModel @Inject constructor(
     private val repository: PokemonRepository
 ): ViewModel() {
 
-    private val viewModelState = PokemonListScreenViewModelState()
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal val viewModelState = PokemonListScreenViewModelState()
 
     var uiState: PokemonListScreenUiState by mutableStateOf(PokemonListScreenUiState.Loading)
     private set
