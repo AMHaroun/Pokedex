@@ -1,5 +1,4 @@
 
-
 <p align="center">
 <img src=https://user-images.githubusercontent.com/29473781/180619084-a56960ab-7efa-4e34-9d33-4e3e581d62ff.png>
 </p>
@@ -12,37 +11,52 @@
 <img src="https://cdn.worldvectorlogo.com/logos/android-logomark.svg" alt="Icon" width="30" height="20">
 </p>
 
-## About Pokédex
+![GitHub last commit (by committer)](https://img.shields.io/github/last-commit/AMHaroun/Pokedex) ![Static Badge](https://img.shields.io/badge/tests-Passing-darkgreen) ![GitHub issues](https://img.shields.io/github/issues/AMHaroun/Pokedex?color=blue) ![Static Badge](https://img.shields.io/badge/Github-AMHaroun-blue?logo=github&link=https%3A%2F%2Fgithub.com%2FAMHaroun) ![Static Badge](https://img.shields.io/badge/LinkedIn-AMHaroun-blue?logo=linkedin&link=https%3A%2F%2Fwww.linkedin.com%2Fin%2Fahmed-haroun-53412b267%2F) ![Static Badge](https://img.shields.io/badge/downloads-20-yellow?color=yellow)
 
+
+
+
+## About Pokédex
 
 <p align="center">
 <img src="https://i.imgur.com/l5f3DRN.png" width="300" height="">
 <img src="https://i.imgur.com/nUlskqz.png" width="300" height="605">
 </p>
 
-<p align="center">
-<img src="https://i.imgur.com/BX98PBw.png" width="300" height="605">
-</p>
-
 
 Pokédex was built with Google's best practices in mind. The app follows Google's recommended app architecture and leverages the latest Jetpack libraries.
+
 
 **Key Features:**
 
 1. **Intuitive User Interface:**
    Navigating through the Pokémon world has never been easier. Pokédex boasts a beautiful and user-friendly interface with Material Theming that allows users to effortlessly explore and discover information about their favorite Pokémon in light & dark mode.
 
+   -
+
 2. **Poke API Integration:**
    Pokédex is powered by the Poke API, ensuring that you have access to the latest data on Pokémon and their stats. This integration guarantees a wealth of information at your fingertips, providing a dynamic and constantly updated experience.
+
+
+-
 
 3. **Advanced Search and Sorting:**
    Find the Pokémon you're looking for with ease. Our app features a search function, enabling users to find Pokémon in seconds.
 
+   <p align="center">
+   <img src="https://i.imgur.com/BX98PBw.png" width="300" height="605">
+   </p>
+
 4. **Detailed Pokémon Profiles:**
    Learn about each Pokémon by visiting their individual profiles. From basic information like height and weight to comprehensive stats, Pokédex provides a rich and informative experience for Pokémon enthusiasts.
 
+   -
+
 5. **Beautiful Visuals:**
    Immerse yourself in stunning visuals and high-quality images of each Pokémon. Pokédex is designed to showcase the beauty of the Pokémon world, making your exploration all the more enjoyable.
+
+
+
 
 
 ## Installation
