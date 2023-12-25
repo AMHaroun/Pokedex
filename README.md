@@ -15,6 +15,16 @@
 ## About Pokédex
 
 
+<p align="center">
+<img src="https://i.imgur.com/l5f3DRN.png" width="300" height="">
+<img src="https://i.imgur.com/nUlskqz.png" width="300" height="605">
+</p>
+
+<p align="center">
+<img src="https://i.imgur.com/BX98PBw.png" width="300" height="605">
+</p>
+
+
 Pokédex was built with Google's best practices in mind. The app follows Google's recommended app architecture and leverages the latest Jetpack libraries.
 
 **Key Features:**
