@@ -36,4 +36,13 @@ class PokemonListScreenViewModelTest{
         val pokemonList = (viewModel.uiState as PokemonListScreenUiState.Success).pokemonList
         assertThat(pokemonList == cachedPokemonList)
     }
+
+    @Test
+    fun loadPokemonPaginated_uiStateIsSuccess(){
+        viewModel.loadPokemonPaginated()
+
+        val currentUiState = viewModel.uiState
+
+        assertThat(currentUiState is PokemonListScreenUiState.Success)
+    }
 }
