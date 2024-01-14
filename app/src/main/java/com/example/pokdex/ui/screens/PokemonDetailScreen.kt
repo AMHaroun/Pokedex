@@ -127,6 +127,9 @@ fun PokemonDetails(
     val defaultDominantColor = Color.LightGray
     var dominantColor by remember{ mutableStateOf(defaultDominantColor) }
 
+    // Prevents user from calling navigateBack() multiple times and navigating to an unintended screen
+    var navigateBackCalled: Boolean by remember { mutableStateOf(false) }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.background(
@@ -136,7 +139,13 @@ fun PokemonDetails(
             )
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
-            BackButton(navigateBack = { navigateBack() })
+            BackButton(navigateBack = {
+                    if(!navigateBackCalled) {
+                        navigateBackCalled = true
+                        navigateBack()
+                    }
+                }
+            )
             Text(
                 text = "#${uiState.pokemon.id} - National Pokédex",
                 style = MaterialTheme.typography.labelMedium,
